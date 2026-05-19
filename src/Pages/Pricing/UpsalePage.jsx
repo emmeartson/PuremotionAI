@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PaymentModal from "../Stripe/PaymentModal";
 import { FaCheck } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import Mastercard from "../../../public/master.png";
@@ -16,36 +17,12 @@ import hannah from "../../../public/Hannah P..jpg";
 
 function UpsalePage() {
   const [loading, setLoading] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleUpgrade = async () => {
-    setLoading(true);
-    try {
-      const result = await dispatch(
-        subscriptionCheckout({
-          price_id: "price_1TAkltF9gOu6UGqJFeNb9M34",
-          is_exclusive: true,
-        }),
-      ).unwrap();
-
-      if (result.checkout_url) {
-        // Open checkout URL in new tab
-        window.open(result.checkout_url, "_blank");
-      }
-    } catch (error) {
-      console.error("Checkout failed:", error);
-
-      // Handle authentication errors
-      if (error.code === "token_not_valid" || error.code === "no_token") {
-        alert("Your session has expired. Please log in again.");
-        navigate("/step-login");
-      } else {
-        alert(error.message || "Failed to process checkout. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-    }
+  const handleUpgrade = () => {
+    setShowPayment(true);
   };
   return (
     <div className="min-h-screen bg-[#fdfcfb] font-sans">
@@ -315,6 +292,17 @@ function UpsalePage() {
           </div>
         </div>
       </section>
+
+      {/* Stripe Payment Modal */}
+      <PaymentModal
+        isOpen={showPayment}
+        onClose={() => setShowPayment(false)}
+        priceId="price_1TAkltF9gOu6UGqJFeNb9M34"
+        planName="Priority Processing"
+        amount="$4.99"
+        isExclusive={true}
+        checkoutType="subscription"
+      />
     </div>
   );
 }

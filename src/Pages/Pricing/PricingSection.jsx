@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PaymentModal from "../Stripe/PaymentModal";
 import { FaCheckCircle } from "react-icons/fa";
 import {
   Check,
@@ -85,7 +86,7 @@ const packages = [
   {
     id: "weekly",
     name: "Weekly Package",
-    price: "$2.49",
+    price: "$1.99",
     original: null,
     label: null,
     desc: "4 Credits Every Week",
@@ -96,8 +97,8 @@ const packages = [
   {
     id: "family",
     name: "Fortnightly Package",
-    price: "$1.29",
-    original: "$3.23",
+    price: "$0.99",
+    original: "$2.48",
     label: "SPECIAL OFFER 60% OFF",
     desc: "15 Credits Every Fortnight",
     credits: 15,
@@ -107,8 +108,8 @@ const packages = [
   {
     id: "monthly",
     name: "Monthly Package",
-    price: "$0.99",
-    original: "$1.98",
+    price: "$0.69",
+    original: "$1.38",
     label: "BEST VALUE",
     desc: "30 Credits Every Month",
     credits: 30,
@@ -120,39 +121,12 @@ const packages = [
 export const PricingSection = () => {
   const [selected, setSelected] = useState("family");
   const [loading, setLoading] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleClaimOffer = async () => {
-    const selectedPackage = packages.find((pkg) => pkg.id === selected);
-    if (!selectedPackage) return;
-
-    setLoading(true);
-    try {
-      const result = await dispatch(
-        subscriptionCheckout({
-          price_id: selectedPackage.price_id,
-          is_exclusive: false,
-        }),
-      ).unwrap();
-
-      if (result.checkout_url) {
-        // Open checkout URL in new tab
-        window.open(result.checkout_url, "_blank");
-      }
-    } catch (error) {
-      console.error("Checkout failed:", error);
-
-      // Handle authentication errors
-      if (error.code === "token_not_valid" || error.code === "no_token") {
-        alert("Your session has expired. Please log in again.");
-        navigate("/step-login");
-      } else {
-        alert(error.message || "Failed to process checkout. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-    }
+  const handleClaimOffer = () => {
+    setShowPayment(true);
   };
 
   const selectedPackage = packages.find((pkg) => pkg.id === selected);
@@ -271,21 +245,19 @@ export const PricingSection = () => {
           <div key={pkg.id} className="relative group">
             {pkg.label && (
               <div
-                className={`absolute -top-2.5 right-4 z-10 text-[12px] font-black px-3 py-0.5 rounded-full whitespace-nowrap ${
-                  pkg.label === "BEST VALUE"
+                className={`absolute -top-2.5 right-4 z-10 text-[12px] font-black px-3 py-0.5 rounded-full whitespace-nowrap ${pkg.label === "BEST VALUE"
                     ? "bg-[#5FAF8E] text-white"
                     : "bg-[#fdca17] text-black"
-                }`}
+                  }`}
               >
                 {pkg.label}
               </div>
             )}
             <label
-              className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                selected === pkg.id
+              className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all ${selected === pkg.id
                   ? "border-2 border-[#634910] bg-white ring-1 ring-[#634910]"
                   : " border-1 border-[#9c8f73] bg-white hover:border-[#7c602e]"
-              }`}
+                }`}
             >
               <input
                 type="radio"
@@ -296,9 +268,8 @@ export const PricingSection = () => {
               />
               <div className="flex items-center gap-3">
                 <div
-                  className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                    selected === pkg.id ? "border-[#5FAF8E]" : "border-gray-300"
-                  }`}
+                  className={`w-4 h-4 rounded-full border flex items-center justify-center ${selected === pkg.id ? "border-[#5FAF8E]" : "border-gray-300"
+                    }`}
                 >
                   {selected === pkg.id && (
                     <div className="w-2 h-2 rounded-full bg-[#5FAF8E]" />
@@ -357,6 +328,16 @@ export const PricingSection = () => {
         cancel online by visiting subscription page in my account on website to
         avoid being charged for the next billing cycle
       </p>
+
+      {/* Stripe Payment Modal */}
+      <PaymentModal
+        isOpen={showPayment}
+        onClose={() => setShowPayment(false)}
+        priceId={selectedPackage.price_id}
+        planName={selectedPackage.name}
+        amount={`$${finalAmount}/${selectedPackage.period.toLowerCase()}`}
+        checkoutType="subscription"
+      />
     </section>
   );
 };

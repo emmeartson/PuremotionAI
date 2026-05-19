@@ -125,7 +125,7 @@ export const Step5_Login = ({ onNext }) => {
     if (
       !signupEmail ||
       !signupFirstName ||
-      !signupLastName ||
+      // !signupLastName ||
       !signupPassword ||
       !signupConfirm
     ) {
@@ -441,20 +441,20 @@ export const Step5_Login = ({ onNext }) => {
 
               <input
                 type="text"
-                placeholder="First Name *"
+                placeholder="Full Name *"
                 value={signupFirstName}
                 onChange={(e) => setSignupFirstName(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#7c602e]/20 outline-none transition-all placeholder:text-gray-300"
                 required
               />
-              <input
+              {/* <input
                 type="text"
                 placeholder="Last Name *"
                 value={signupLastName}
                 onChange={(e) => setSignupLastName(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#7c602e]/20 outline-none transition-all placeholder:text-gray-300"
                 required
-              />
+              /> */}
               <input
                 type="email"
                 placeholder="Email *"

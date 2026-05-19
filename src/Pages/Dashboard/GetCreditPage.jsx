@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PaymentModal from "../Stripe/PaymentModal";
 import { CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -53,36 +54,12 @@ const packages = [
 export const GetCreditPage = () => {
   const [selected, setSelected] = useState("max");
   const [loading, setLoading] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleClaimOffer = async () => {
-    const selectedPackage = packages.find((pkg) => pkg.id === selected);
-    if (!selectedPackage) return;
-
-    setLoading(true);
-    try {
-      const result = await dispatch(
-        packageCheckout(selectedPackage.price_id),
-      ).unwrap();
-
-      if (result.checkout_url) {
-        // Open checkout URL in new tab
-        window.open(result.checkout_url, "_blank");
-      }
-    } catch (error) {
-      console.error("Checkout failed:", error);
-
-      // Handle authentication errors
-      if (error.code === "token_not_valid" || error.code === "no_token") {
-        alert("Your session has expired. Please log in again.");
-        navigate("/step-login");
-      } else {
-        alert(error.message || "Failed to process checkout. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-    }
+  const handleClaimOffer = () => {
+    setShowPayment(true);
   };
 
   return (
@@ -184,6 +161,16 @@ export const GetCreditPage = () => {
           <img src="/payments.png" alt="" className="h-12 sm:h-16" />
         </div>
       </div>
+
+      {/* Stripe Payment Modal */}
+      <PaymentModal
+        isOpen={showPayment}
+        onClose={() => setShowPayment(false)}
+        priceId={packages.find((pkg) => pkg.id === selected)?.price_id}
+        planName={packages.find((pkg) => pkg.id === selected)?.name}
+        amount={packages.find((pkg) => pkg.id === selected)?.price + "/credit"}
+        checkoutType="package"
+      />
     </div>
   );
 };

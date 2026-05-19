@@ -1,38 +1,18 @@
 import React, { useState } from "react";
+import PaymentModal from "../Stripe/PaymentModal";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { packageCheckout } from "../../Redux/PackagePurchase";
 
 export default function BestDeal() {
   const [loading, setLoading] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const BEST_DEAL_PRICE_ID = "price_1TAkg7F9gOu6UGqJvFbKiF8q";
 
-  const handleUpgrade = async () => {
-    setLoading(true);
-    try {
-      const result = await dispatch(
-        packageCheckout(BEST_DEAL_PRICE_ID),
-      ).unwrap();
-
-      if (result.checkout_url) {
-        // Open checkout URL in new tab
-        window.open(result.checkout_url, "_blank");
-      }
-    } catch (error) {
-      console.error("Checkout failed:", error);
-
-      // Handle authentication errors
-      if (error.code === "token_not_valid" || error.code === "no_token") {
-        alert("Your session has expired. Please log in again.");
-        navigate("/step-login");
-      } else {
-        alert(error.message || "Failed to process checkout. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-    }
+  const handleUpgrade = () => {
+    setShowPayment(true);
   };
 
   return (
@@ -111,6 +91,16 @@ export default function BestDeal() {
           {/* <span className="text-sm text-gray-600">Pay</span> */}
         </div>
       </div>
+
+      {/* Stripe Payment Modal */}
+      <PaymentModal
+        isOpen={showPayment}
+        onClose={() => setShowPayment(false)}
+        priceId={BEST_DEAL_PRICE_ID}
+        planName="Best Deal - 50 Credits"
+        amount="$39.00"
+        checkoutType="package"
+      />
     </div>
   );
 }

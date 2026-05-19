@@ -25,6 +25,7 @@ import ContactForm from "../Pages/Home/ContactForm";
 import PrivacyPolicy from "../Shared/PrivacyPolicy";
 import TnC from "../Shared/TnC";
 import Test from "../Pages/Dashboard/test";
+import PaymentTestPage from "../Pages/Stripe/PaymentTestPage";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ export const router = createBrowserRouter([
     element: <Home />,
   },
   {
+    path: "/payment-test",
+    element: <PaymentTestPage />,
+  },
+  {
     path: "/dashboard",
     element: (
       <ProtectedRoute>
@@ -124,6 +129,7 @@ export const router = createBrowserRouter([
         path: "settings",
         element: <ProfileSettingsPage />,
       },
+
     ],
   },
 ]);
