@@ -17,7 +17,7 @@ function Hero() {
               Every Photo Has a Story.
             </h1>
             <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-[#634910] leading-tight text-center md:text-left">
-              We Bring It Back to Life.
+              We Bring It Back to Life. rimon
             </h1>
 
             <div className="flex flex-row flex-nowrap items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-full w-full sm:w-fit border-2 border-[#E6D8C4] justify-center sm:justify-start md:justify-start overflow-x-auto sm:overflow-x-visible">
