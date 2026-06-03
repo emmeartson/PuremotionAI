@@ -297,7 +297,7 @@ function UpsalePage() {
       <PaymentModal
         isOpen={showPayment}
         onClose={() => setShowPayment(false)}
-        priceId="price_1TAkltF9gOu6UGqJFeNb9M34"
+        priceId="price_1TaAjEF9gOu6UGqJkuGba5m1"
         planName="Priority Processing"
         amount="$4.99"
         isExclusive={true}

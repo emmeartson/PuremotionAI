@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Star, Camera, Check, X, Clock } from "lucide-react";
 import trusted from "../../../public/trusted.png";
 import { BsStarFill } from "react-icons/bs";
+import { trackAddToCart } from "../../utils/metaPixel";
 
 export const Step3_Upload = ({ onNext, selectedTheme }) => {
   const requiresTwoImages = selectedTheme?.requiresTwoImages || false;
@@ -87,6 +88,9 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
 
     submitLockRef.current = true;
     setIsSubmitting(true);
+
+    // Meta Pixel: AddToCart on successful upload + continue
+    trackAddToCart();
 
     try {
       await Promise.resolve(onNext({ uploadedFiles, isLong }));

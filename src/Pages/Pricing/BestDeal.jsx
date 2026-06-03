@@ -9,7 +9,7 @@ export default function BestDeal() {
   const [showPayment, setShowPayment] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const BEST_DEAL_PRICE_ID = "price_1TAkg7F9gOu6UGqJvFbKiF8q";
+  const BEST_DEAL_PRICE_ID = "price_1TImCSF9gOu6UGqJT4WuB6IA";
 
   const handleUpgrade = () => {
     setShowPayment(true);

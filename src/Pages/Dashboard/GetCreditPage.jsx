@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { packageCheckout } from "../../Redux/PackagePurchase";
 const packages = [
   {
-    id: "max",
+    id: "max_pack",
     name: "Max Pack",
     credits: "80 Credits",
     price: "$0.79",
@@ -14,11 +14,11 @@ const packages = [
     badge: "BEST VALUE",
     badgeColor: "bg-[#5FAF8E]",
     borderColor: "border-gray-200",
-    price_id: "price_1TAkfkF9gOu6UGqJoXkoyAWJ",
+    price_id: "price_1TImCVF9gOu6UGqJ9AEXVgTw",
     icon: "/Max_Pack.png",
   },
   {
-    id: "power",
+    id: "power_pack",
     name: "Power Pack",
     credits: "40 Credits",
     price: "$0.99",
@@ -26,27 +26,27 @@ const packages = [
     badge: "MOST POPULAR",
     badgeColor: "bg-[#fdca17]",
     borderColor: "border-gray-200",
-    price_id: "price_1TAkfEF9gOu6UGqJhHHc1Dbh",
+    price_id: "price_1TImCYF9gOu6UGqJgaDeMEoW",
     icon: "/Power_Pack.png",
   },
   {
-    id: "value",
+    id: "value_pack",
     name: "Value Pack",
     credits: "20 Credits",
     price: "$1.49",
     subtitle: "Per Credit",
     borderColor: "border-gray-200",
-    price_id: "price_1TAkedF9gOu6UGqJpOiNcBrF",
+    price_id: "price_1TImCbF9gOu6UGqJbBu6fDgY",
     icon: "/Value_Pack.png",
   },
   {
-    id: "boost",
+    id: "boost_pack",
     name: "Boost Pack",
     credits: "10 Credits",
     price: "$1.79",
     subtitle: "Per Credit",
     borderColor: "border-gray-200",
-    price_id: "price_1TAkeBF9gOu6UGqJHMlPhEOO",
+    price_id: "price_1TImCdF9gOu6UGqJagS1MhWO",
     icon: "/Boost_Pack.png",
   },
 ];
@@ -84,11 +84,10 @@ export const GetCreditPage = () => {
 
             {/* Package Card */}
             <label
-              className={`flex items-start sm:items-center justify-between gap-3 sm:gap-4 p-4 sm:p-5 rounded-[1.5rem] border-2 cursor-pointer transition-all bg-white hover:shadow-md ${
-                selected === pkg.id
+              className={`flex items-start sm:items-center justify-between gap-3 sm:gap-4 p-4 sm:p-5 rounded-[1.5rem] border-2 cursor-pointer transition-all bg-white hover:shadow-md ${selected === pkg.id
                   ? "border-[#7c602e] ring-1 ring-[#7c602e]/10"
                   : pkg.borderColor
-              }`}
+                }`}
             >
               <input
                 type="radio"
@@ -101,11 +100,10 @@ export const GetCreditPage = () => {
               {/* Left: Radio UI & Name */}
               <div className="flex items-center gap-3 sm:gap-5 min-w-0">
                 <div
-                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                    selected === pkg.id
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${selected === pkg.id
                       ? "border-[#5FAF8E] bg-[#5FAF8E]"
                       : "border-gray-300"
-                  }`}
+                    }`}
                 >
                   {selected === pkg.id && (
                     <div className="w-2 h-2 rounded-full bg-white" />

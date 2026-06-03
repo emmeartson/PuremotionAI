@@ -84,42 +84,42 @@ const themes = [
 
 const packages = [
   {
-    id: "weekly",
-    name: "Weekly Package",
+    id: "weekly_update",
+    name: "Starter Package",
     price: "$1.99",
     original: null,
     label: null,
-    desc: "4 Credits Every Week",
+    desc: "4 Memories every week",
     credits: 4,
     period: "Week",
-    price_id: "price_1TAkhEF9gOu6UGqJlgUNKTEO",
+    price_id: "price_1TYHxvF9gOu6UGqJWKdchdbY",
   },
   {
-    id: "family",
-    name: "Fortnightly Package",
+    id: "fortnightly_update",
+    name: "Family Package",
     price: "$0.99",
     original: "$2.48",
     label: "SPECIAL OFFER 60% OFF",
-    desc: "15 Credits Every Fortnight",
+    desc: "15 Memories every 2 weeks",
     credits: 15,
     period: "Fortnight",
-    price_id: "price_1TAkioF9gOu6UGqJuW3PQWXH",
+    price_id: "price_1TYHzOF9gOu6UGqJ9A479qAG",
   },
   {
-    id: "monthly",
-    name: "Monthly Package",
+    id: "monthly_update",
+    name: "Premium Package",
     price: "$0.69",
     original: "$1.38",
     label: "BEST VALUE",
-    desc: "30 Credits Every Month",
+    desc: "30 Memories every month",
     credits: 30,
     period: "Month",
-    price_id: "price_1TAkjDF9gOu6UGqJceuS9xl2",
+    price_id: "price_1TYI0FF9gOu6UGqJpAN8lEvp",
   },
 ];
 
 export const PricingSection = () => {
-  const [selected, setSelected] = useState("family");
+  const [selected, setSelected] = useState("fortnightly_update");
   const [loading, setLoading] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const dispatch = useDispatch();
@@ -129,9 +129,9 @@ export const PricingSection = () => {
     setShowPayment(true);
   };
 
-  const selectedPackage = packages.find((pkg) => pkg.id === selected);
-  const priceAmount = parseFloat(selectedPackage.price.replace("$", ""));
-  const finalAmount = (priceAmount * selectedPackage.credits).toFixed(2);
+  const selectedPackage = packages.find((pkg) => pkg.id === selected) || packages[0];
+  const priceAmount = selectedPackage ? parseFloat(selectedPackage.price.replace("$", "")) : 0;
+  const finalAmount = selectedPackage ? (priceAmount * selectedPackage.credits).toFixed(2) : "0.00";
 
   return (
     <section className="max-w-5xl mx-auto text-center py-10 sm:py-12 px-4">
@@ -246,8 +246,8 @@ export const PricingSection = () => {
             {pkg.label && (
               <div
                 className={`absolute -top-2.5 right-4 z-10 text-[12px] font-black px-3 py-0.5 rounded-full whitespace-nowrap ${pkg.label === "BEST VALUE"
-                    ? "bg-[#5FAF8E] text-white"
-                    : "bg-[#fdca17] text-black"
+                  ? "bg-[#5FAF8E] text-white"
+                  : "bg-[#fdca17] text-black"
                   }`}
               >
                 {pkg.label}
@@ -255,8 +255,8 @@ export const PricingSection = () => {
             )}
             <label
               className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all ${selected === pkg.id
-                  ? "border-2 border-[#634910] bg-white ring-1 ring-[#634910]"
-                  : " border-1 border-[#9c8f73] bg-white hover:border-[#7c602e]"
+                ? "border-2 border-[#634910] bg-white ring-1 ring-[#634910]"
+                : " border-1 border-[#9c8f73] bg-white hover:border-[#7c602e]"
                 }`}
             >
               <input
@@ -308,11 +308,10 @@ export const PricingSection = () => {
         disabled={loading}
         className="w-2/3 py-4 text-lg mb-4 uppercase font-extrabold disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? "PROCESSING..." : "CLAIM OFFER"}
+        {loading ? "PROCESSING..." : "Get Started Now"}
       </Button>
       <div className="flex items-center justify-center gap-1.5 text-[14px] text-black font-bold mb-4">
-        <FaCheckCircle size={14} className="text-green-500" /> Safe checkout and
-        14-day money-back guarantee
+        <FaCheckCircle size={14} className="text-green-500" /> Secure checkout  •  Cancel anytime  •  14-day money-back guarantee
       </div>
 
       {/* Payment Icons */}
@@ -320,14 +319,14 @@ export const PricingSection = () => {
         <img src="/payments.png" className="h-16" alt="Visa" />
       </div>
 
-      <p className="text-[16px] text-gray-600 leading-relaxed px-4">
+      {/* <p className="text-[16px] text-gray-600 leading-relaxed px-4">
         By clicking Claim Offer, I agree that the plan I have selected will
         automatically renew until I cancel, PureMotion will automatically charge
         my payment method ${finalAmount} every{" "}
         {selectedPackage.period.toLowerCase()} thereafter until I cancel. I can
         cancel online by visiting subscription page in my account on website to
         avoid being charged for the next billing cycle
-      </p>
+      </p> */}
 
       {/* Stripe Payment Modal */}
       <PaymentModal

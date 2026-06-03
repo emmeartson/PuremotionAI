@@ -13,6 +13,7 @@ import {
   getVideoImageFiles,
 } from "../../Redux/VideoUpload";
 import { Link } from "react-router-dom";
+import { trackLead } from "../../utils/metaPixel";
 
 export const Step5_Login = ({ onNext }) => {
   const navigate = useNavigate();
@@ -157,6 +158,10 @@ export const Step5_Login = ({ onNext }) => {
       const response = await authService.register(payload);
       setSuccessMessage(response.message || "OTP sent to your email!");
       setOtpEmail(signupEmail);
+
+      // Meta Pixel: Lead — email successfully captured
+      trackLead();
+
       setActiveView("otp");
     } catch (error) {
       setSignupError(error.message || "Registration failed. Please try again.");
