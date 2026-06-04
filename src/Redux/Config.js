@@ -1,7 +1,7 @@
 // API Base URL Configuration
 // const rawBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://10.10.13.80:8004';
-const rawBaseUrl = 'https://api.puremotion.co'; //live server
-// const rawBaseUrl = 'http://10.10.13.80:8005'; //local server
+// const rawBaseUrl = 'https://api.puremotion.co'; //live server
+const rawBaseUrl = 'https://api.yourcompassy.com'; //local server
 
 
 

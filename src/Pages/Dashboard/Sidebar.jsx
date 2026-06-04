@@ -11,6 +11,7 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { clear } from "localforage";
 import { authService } from "../../Redux/Auth";
+import { ChangePasswordModal } from "./ChangePasswordModal";
 
 const navItems = [
   {
@@ -30,6 +31,7 @@ export const Sidebar = ({ className }) => {
   const location = useLocation(); // Used to check the current URL
   const [menuOpen, setMenuOpen] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -176,8 +178,19 @@ export const Sidebar = ({ className }) => {
           {menuOpen && (
             <div
               ref={menuRef}
-              className="absolute right-0 mt-2 w-40 bg-white border border-gray-100 rounded-md shadow-lg z-50"
+              className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-lg z-50 overflow-hidden"
             >
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setMenuOpen(false);
+                  setShowChangePassword(true);
+                }}
+                className="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 text-gray-700 font-medium transition-colors"
+              >
+                Change Password
+              </button>
+              <div className="border-t border-gray-100" />
               <button
                 onClick={async (e) => {
                   e.stopPropagation();
@@ -188,13 +201,13 @@ export const Sidebar = ({ className }) => {
                     console.error("Failed to clear localForage:", err);
                   }
                   authService.logout();
-                  localStorage.removeItem("user_info"); // Clear user info from localStorage
-                  localStorage.removeItem("access_token"); // Clear access token from localStorage
-                  localStorage.removeItem("refresh_token"); // Clear refresh token from localStorage
-                  localStorage.removeItem("login_response"); // Clear persisted Redux state
+                  localStorage.removeItem("user_info");
+                  localStorage.removeItem("access_token");
+                  localStorage.removeItem("refresh_token");
+                  localStorage.removeItem("login_response");
                   navigate("/");
                 }}
-                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                className="w-full text-left px-4 py-2.5 text-sm hover:bg-red-50 text-red-500 font-medium transition-colors"
               >
                 Logout
               </button>
@@ -220,6 +233,14 @@ export const Sidebar = ({ className }) => {
           Privacy Policy
         </p>
       </div>
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={showChangePassword}
+        onClose={(success) => {
+          setShowChangePassword(false);
+        }}
+      />
     </aside>
   );
 };

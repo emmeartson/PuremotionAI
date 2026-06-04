@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ImagePlus, Upload, Play, Clock, Trash2 } from "lucide-react";
+import { ImagePlus, Upload, Play, Clock, Trash2, ShieldAlert } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchVideos, deleteVideo } from "../../Redux/Videos";
+import { getProfile } from "../../Redux/Profile";
 import { Toast } from "../../Shared/Toast";
 
 export const DashboardHome = () => {
@@ -13,6 +14,8 @@ export const DashboardHome = () => {
   const [deletingId, setDeletingId] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null); // { videoId, videoTitle }
   const [toastMessage, setToastMessage] = useState(null);
+  const { data: profile } = useSelector((state) => state.profile);
+  const [showVerifyPopup, setShowVerifyPopup] = useState(false);
 
   useEffect(() => {
     dispatch(fetchVideos())
@@ -34,7 +37,15 @@ export const DashboardHome = () => {
         console.log("Setting toast message to:", errorMsg);
         setToastMessage(errorMsg);
       });
+    dispatch(getProfile());
   }, [dispatch]);
+
+  // Show verification popup if profile is not verified
+  useEffect(() => {
+    if (profile && profile.is_verified === false) {
+      setShowVerifyPopup(true);
+    }
+  }, [profile]);
 
   // Also show toast when Redux error state changes
   useEffect(() => {
@@ -222,6 +233,47 @@ export const DashboardHome = () => {
           <span>Create PureMotion</span>
         </button>
       </div>
+
+      {/* Unverified Profile Popup */}
+      {showVerifyPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setShowVerifyPopup(false)}
+          />
+
+          <div className="relative bg-white rounded-2xl p-8 mx-4 max-w-md w-full shadow-2xl text-center animate-in fade-in zoom-in-95 duration-300">
+            <div className="mx-auto w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-5">
+              <ShieldAlert size={32} className="text-amber-600" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              Profile Not Verified
+            </h3>
+            <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+              Your account is not verified yet. Please complete your profile
+              verification to access all features.
+            </p>
+
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  setShowVerifyPopup(false);
+                  navigate("/dashboard/settings");
+                }}
+                className="w-full px-4 py-3 bg-[#7c602e] hover:bg-[#634d25] text-white rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg transition-all"
+              >
+                Complete Profile
+              </button>
+              <button
+                onClick={() => setShowVerifyPopup(false)}
+                className="w-full px-4 py-2.5 text-gray-500 hover:text-gray-700 text-sm font-semibold transition-colors"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       {confirmDelete && (

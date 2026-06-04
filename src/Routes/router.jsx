@@ -26,6 +26,7 @@ import PrivacyPolicy from "../Shared/PrivacyPolicy";
 import TnC from "../Shared/TnC";
 import Test from "../Pages/Dashboard/test";
 import PaymentTestPage from "../Pages/Stripe/PaymentTestPage";
+import Step_onlyemail from "../Pages/FlashbackAI/Step_onlyemail";
 
 export const router = createBrowserRouter([
   {
@@ -38,8 +39,12 @@ export const router = createBrowserRouter([
   },
   {
     path: "/step-login",
-    element: <Step5_Login />,
+    element: <Step_onlyemail />,
   },
+  // {
+  //   path: "/step-login",
+  //   element: <Step5_Login />,
+  // },
   {
     path: "/step-preview",
     element: <Step_PreviewReady />,
