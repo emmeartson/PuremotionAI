@@ -116,7 +116,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }) => {
           /* Form State */
           <div className="text-center">
             <div className="mx-auto w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-5">
-              <Lock size={32} className="text-purple-600" />
+              <Lock size={32} className="text-[#7c602e]" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">
               Change Password

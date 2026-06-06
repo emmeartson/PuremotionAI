@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "./Button";
 import AnnouncementBar from "../../Shared/AnnouncementBar";
 import { useNavigate, Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { FaCheck, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { registerOrLogin } from "../../Redux/OnlyemailCreateacc";
 import { authService } from "../../Redux/Auth";
+import { googleLoginOnly } from "../../Redux/GoogleauthforLoginonly";
 
 export const Step_onlyemail = ({ onNext }) => {
   const navigate = useNavigate();
@@ -35,6 +36,117 @@ export const Step_onlyemail = ({ onNext }) => {
 
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+
+  // Google auth state
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [googleError, setGoogleError] = useState("");
+  const googlePopupRef = useRef(null);
+  const googleIntervalRef = useRef(null);
+
+ const GOOGLE_AUTH_URL =
+    "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=https://www.puremotion.co/&prompt=consent&response_type=code&client_id=378868666274-f5mbkg4s1rnu8ik1g3amoce3fg1dhciv.apps.googleusercontent.com&scope=openid%20email%20profile&access_type=offline";
+
+  // Cleanup Google popup on unmount
+  useEffect(() => {
+    return () => {
+      if (googleIntervalRef.current) clearInterval(googleIntervalRef.current);
+      if (googlePopupRef.current && !googlePopupRef.current.closed) {
+        googlePopupRef.current.close();
+      }
+    };
+  }, []);
+
+  // --- Google Auth Handlers ---
+  const handleGoogleAuth = () => {
+    setLoginError("");
+    setGoogleError("");
+    setGoogleLoading(true);
+
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+
+    const popup = window.open(
+      GOOGLE_AUTH_URL,
+      "googleAuth",
+      `width=${width},height=${height},left=${left},top=${top},scrollbars=yes`
+    );
+
+    googlePopupRef.current = popup;
+
+    // Poll the popup to extract the authorization code
+    googleIntervalRef.current = setInterval(() => {
+      try {
+        if (!popup || popup.closed) {
+          clearInterval(googleIntervalRef.current);
+          setGoogleLoading(false);
+          return;
+        }
+
+        const currentUrl = popup.location.href;
+
+        if (currentUrl && currentUrl.includes("code=")) {
+          const url = new URL(currentUrl);
+          let code = url.searchParams.get("code");
+
+          // If code is nested in the 'next' param (double-encoded)
+          if (!code) {
+            const next = url.searchParams.get("next");
+            if (next) {
+              const decoded = decodeURIComponent(next);
+              const qIndex = decoded.indexOf("?");
+              if (qIndex !== -1) {
+                const nestedParams = new URLSearchParams(
+                  decoded.substring(qIndex + 1)
+                );
+                code = nestedParams.get("code");
+              }
+            }
+          }
+
+          if (code) {
+            popup.close();
+            clearInterval(googleIntervalRef.current);
+            handleGoogleCode(code);
+          }
+        }
+      } catch (e) {
+        // Cross-origin error — ignore and keep polling
+      }
+    }, 500);
+  };
+
+  const handleGoogleCode = async (code) => {
+    try {
+      const response = await dispatch(googleLoginOnly({ code })).unwrap();
+
+      // Save auth data to localStorage
+      if (response.tokens) {
+        localStorage.setItem("access_token", response.tokens.access);
+        localStorage.setItem("refresh_token", response.tokens.refresh);
+      }
+      if (response.user) {
+        localStorage.setItem("user_info", JSON.stringify(response.user));
+      }
+      localStorage.setItem("login_response", JSON.stringify(response));
+
+      // Redirect based on subscription status
+      const isSubscribed = response.user?.is_subscribed;
+      if (isSubscribed) {
+        navigate("/dashboard");
+      } else {
+        navigate("/pricing");
+      }
+    } catch (error) {
+      const errorMsg =
+        error?.message || "Google authentication failed. Please try again.";
+      setGoogleError(errorMsg);
+      setLoginError(errorMsg);
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   // Email-only signup handler
   const handleSubmit = async (e) => {
@@ -306,10 +418,44 @@ export const Step_onlyemail = ({ onNext }) => {
               <Button
                 className="w-full py-3.5 rounded-xl text-white font-semibold text-base shadow-sm"
                 type="submit"
-                disabled={emailLoading}
+                disabled={emailLoading || googleLoading}
               >
                 {emailLoading ? "Loading..." : "Continue"}
               </Button>
+
+              {/* Divider */}
+              <div className="relative my-2">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-gray-200"></span>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase tracking-wider font-semibold text-gray-400">
+                  <span className="bg-white px-3">Or</span>
+                </div>
+              </div>
+
+              {/* Continue with Google */}
+              {/* <button
+                type="button"
+                onClick={handleGoogleAuth}
+                disabled={emailLoading || googleLoading}
+                className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 py-3 rounded-xl font-semibold transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+              >
+                {googleLoading ? (
+                  <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <img
+                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                    alt="Google"
+                    className="w-5 h-5"
+                  />
+                )}
+                {googleLoading ? "Connecting..." : "Continue with Google"}
+              </button> */}
+
+              {googleError && (
+                <p className="text-red-500 text-sm mt-1">{googleError}</p>
+              )}
+
               <div className="text-sm text-gray-600">
                 Already have an account?{" "}
                 <span
@@ -368,10 +514,40 @@ export const Step_onlyemail = ({ onNext }) => {
               <Button
                 className="w-full py-3.5 rounded-xl text-white font-semibold text-base shadow-sm"
                 type="submit"
-                disabled={loading}
+                disabled={loading || googleLoading}
               >
                 {loading ? "Logging in..." : "Login"}
               </Button>
+
+              {/* Divider */}
+              <div className="relative my-2">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-gray-200"></span>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase tracking-wider font-semibold text-gray-400">
+                  <span className="bg-white px-3">Or</span>
+                </div>
+              </div>
+
+              {/* Continue with Google */}
+              <button
+                type="button"
+                onClick={handleGoogleAuth}
+                disabled={loading || googleLoading}
+                className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 py-3 rounded-xl font-semibold transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+              >
+                {googleLoading ? (
+                  <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <img
+                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                    alt="Google"
+                    className="w-5 h-5"
+                  />
+                )}
+                {googleLoading ? "Connecting..." : "Continue with Google"}
+              </button>
+
               <div className="text-sm text-gray-600">
                 Don't have an account?{" "}
                 <span

@@ -11,7 +11,6 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { clear } from "localforage";
 import { authService } from "../../Redux/Auth";
-import { ChangePasswordModal } from "./ChangePasswordModal";
 
 const navItems = [
   {
@@ -31,7 +30,6 @@ export const Sidebar = ({ className }) => {
   const location = useLocation(); // Used to check the current URL
   const [menuOpen, setMenuOpen] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [showChangePassword, setShowChangePassword] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -181,17 +179,6 @@ export const Sidebar = ({ className }) => {
               className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-lg z-50 overflow-hidden"
             >
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setMenuOpen(false);
-                  setShowChangePassword(true);
-                }}
-                className="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 text-gray-700 font-medium transition-colors"
-              >
-                Change Password
-              </button>
-              <div className="border-t border-gray-100" />
-              <button
                 onClick={async (e) => {
                   e.stopPropagation();
                   setMenuOpen(false);
@@ -233,14 +220,6 @@ export const Sidebar = ({ className }) => {
           Privacy Policy
         </p>
       </div>
-
-      {/* Change Password Modal */}
-      <ChangePasswordModal
-        isOpen={showChangePassword}
-        onClose={(success) => {
-          setShowChangePassword(false);
-        }}
-      />
     </aside>
   );
 };

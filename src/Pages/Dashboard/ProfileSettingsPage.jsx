@@ -10,6 +10,7 @@ import { Toast } from "../../Shared/Toast";
 import axios from "axios";
 import { BASE_URL } from "../../Redux/Config";
 import { googleLogin } from "../../Redux/Continuewithgoogle";
+import { ChangePasswordModal } from "./ChangePasswordModal";
 
 const formatDate = (isoString) => {
   const date = new Date(isoString);
@@ -34,6 +35,7 @@ export const ProfileSettingsPage = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("Profile updated successfully!");
   const [copied, setCopied] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   // Verification state
   const [showVerifyModal, setShowVerifyModal] = useState(false);
@@ -190,7 +192,7 @@ export const ProfileSettingsPage = () => {
 
   // --- Google Auth Handler ---
   const GOOGLE_AUTH_URL =
-    "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:5174/dashboard/settings&prompt=consent&response_type=code&client_id=936293546348-fbrmd7f8tgl56hsv9o6togbap2doiou2.apps.googleusercontent.com&scope=openid%20email%20profile&access_type=offline";
+    "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=https://www.puremotion.co/dashboard/settings&prompt=consent&response_type=code&client_id=378868666274-f5mbkg4s1rnu8ik1g3amoce3fg1dhciv.apps.googleusercontent.com&scope=openid%20email%20profile&access_type=offline";
 
   const handleGoogleAuth = () => {
     setVerifyError("");
@@ -434,40 +436,52 @@ export const ProfileSettingsPage = () => {
           </div>
 
           {/* Edit/Save Buttons */}
-          <div className="flex gap-3">
-            {!isEditing ? (
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-3">
+              {!isEditing ? (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="flex-1 bg-[#7c602e] hover:bg-[#634d25] text-white py-3 rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
+                >
+                  <Edit2 size={16} />
+                  Edit Profile
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={handleSaveProfile}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
+                  >
+                    <Save size={16} />
+                    Save
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsEditing(false);
+                      setFormData({
+                        first_name: profile?.first_name || "",
+                        last_name: profile?.last_name || "",
+                        image: null,
+                      });
+                      setImagePreview(profile?.image || null);
+                    }}
+                    className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
+                  >
+                    <X size={16} />
+                    Cancel
+                  </button>
+                </>
+              )}
+            </div>
+
+            {!isEditing && (
               <button
-                onClick={() => setIsEditing(true)}
-                className="flex-1 bg-[#7c602e] hover:bg-[#634d25] text-white py-3 rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
+                onClick={() => setShowChangePasswordModal(true)}
+                className="w-full  bg-[#7c602e] hover:bg-[#634d25] text-white border border-gray-200  py-3 rounded-xl font-bold text-sm uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2"
               >
-                <Edit2 size={16} />
-                Edit Profile
+                <Key size={16} />
+                Change Password
               </button>
-            ) : (
-              <>
-                <button
-                  onClick={handleSaveProfile}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
-                >
-                  <Save size={16} />
-                  Save
-                </button>
-                <button
-                  onClick={() => {
-                    setIsEditing(false);
-                    setFormData({
-                      first_name: profile?.first_name || "",
-                      last_name: profile?.last_name || "",
-                      image: null,
-                    });
-                    setImagePreview(profile?.image || null);
-                  }}
-                  className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
-                >
-                  <X size={16} />
-                  Cancel
-                </button>
-              </>
             )}
           </div>
 
@@ -591,6 +605,12 @@ export const ProfileSettingsPage = () => {
           </button>
         </div>
       </div>
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={showChangePasswordModal}
+        onClose={() => setShowChangePasswordModal(false)}
+      />
 
       {/* Verification Modal */}
       {showVerifyModal && (
@@ -716,7 +736,7 @@ export const ProfileSettingsPage = () => {
             {verifyStep === "password" && (
               <div className="text-center">
                 <div className="mx-auto w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-5">
-                  <Lock size={32} className="text-purple-600" />
+                  <Lock size={32} className=" text-[#7c602e]" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
                   Set Your Password
@@ -767,7 +787,7 @@ export const ProfileSettingsPage = () => {
                 <button
                   onClick={handleSetPassword}
                   disabled={verifyLoading || !newPassword || !confirmPassword}
-                  className="w-full px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg transition-all disabled:opacity-50"
+                  className="w-full px-4 py-3 bg-[#7c602e] hover:bg-[#634d25] text-white rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg transition-all disabled:opacity-50"
                 >
                   {verifyLoading ? "Setting Password..." : "Set Password"}
                 </button>

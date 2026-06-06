@@ -55,7 +55,7 @@ export const updateProfile = createAsyncThunk(
       if (profileData.image) formData.append("image", profileData.image);
 
       const response = await axios.patch(
-        `${BASE_URL}/accounts/api/profile`,
+        `${BASE_URL}accounts/api/profile`,
         formData,
         {
           headers: {
