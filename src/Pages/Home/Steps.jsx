@@ -106,7 +106,8 @@ function Steps() {
         onClick={() => navigate("/flashback")}
       >
         <span className="flex items-center gap-3 sm:gap-6">
-          <FaArrowRightLong /> Try Now — Bring My Photo to Life
+          {/* <FaArrowRightLong />  */}
+          Create My Memory Video
         </span>
       </Button>
     </div>

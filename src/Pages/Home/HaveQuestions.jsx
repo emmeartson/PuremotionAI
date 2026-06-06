@@ -34,7 +34,8 @@ function HaveQuestions() {
         </div>
         <Link to="/flashback">
           <button className="bg-[#eaddcf] hover:bg-[#e0d3be] text-gray-900 font-semibold rounded-full px-6 py-2 flex items-center gap-2 transition text-base border border-[#eaddcf]">
-            Get Started <FaArrowRightLong className="ml-1" />
+            Bring My Memory Back To Life
+            {/* <FaArrowRightLong className="ml-1" /> */}
           </button>
         </Link>
       </div>

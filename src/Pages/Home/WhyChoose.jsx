@@ -78,7 +78,8 @@ function WhyChoose() {
         onClick={() => navigate("/flashback")}
       >
         <span className="flex items-center gap-3 sm:gap-6">
-          <FaArrowRightLong /> Try Now — Bring My Photo to Life
+          {/* <FaArrowRightLong />  */}
+          Start My Memory
         </span>
       </Button>
     </div>

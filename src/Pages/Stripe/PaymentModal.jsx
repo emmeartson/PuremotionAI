@@ -205,16 +205,21 @@ function PaymentModal({
 
               <h2
                 id="payment-modal-title"
-                className="text-2xl font-semibold text-[#634910] font-serif"
+                className="text-[28px] sm:text-[34px] text-gray-900 font-serif leading-[1.2]"
               >
-                Complete Your Order Now
+                Your Memory Is Ready
+                <br />
+                To <span className="text-[#967431] italic">Come Alive</span>
               </h2>
 
-              <div className="bg-[#634910]/10 rounded-xl px-3 py-1 mt-2 flex items-center gap-2">
-                <p className="text-sm text-[#81755b] mt-0.5 flex items-center gap-1.5">
-                  <FaShieldAlt className="text-green-500 text-xs" />
-                  Secure payment powered by Stripe
-                </p>
+              <p className="text-[15px] text-gray-500 mt-4 px-4 max-w-sm">
+                Complete your secure checkout to unlock your restored memory.
+              </p>
+
+              <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-2 mt-5 text-[13px] text-gray-500">
+                <span className="flex items-center gap-1.5"><span className="text-gray-400">✓</span> Secure checkout</span>
+                <span className="flex items-center gap-1.5"><span className="text-gray-400">✓</span> Cancel anytime</span>
+                <span className="flex items-center gap-1.5"><span className="text-gray-400">✓</span> Private & encrypted</span>
               </div>
             </div>
           </div>
