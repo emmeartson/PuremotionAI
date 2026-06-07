@@ -135,7 +135,7 @@ export const PricingSection = () => {
 
   return (
     <section className="max-w-5xl mx-auto text-center py-10 sm:py-12 px-4">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif text-gray-900 mb-4 leading-tight font-bold">
+      {/* <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif text-gray-900 mb-4 leading-tight font-bold">
         Watch Your Photo Come Alive Before Your Eyes
       </h1>
       <p className="text-[#7c602e] font-medium mb-4 sm:mb-6 text-xl sm:text-2xl">
@@ -144,10 +144,10 @@ export const PricingSection = () => {
           60%
         </span>{" "}
         discount is active — don't miss it
-      </p>
+      </p> */}
 
       {/* Social Proof Mini */}
-      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-3 sm:px-4 py-1 sm:py-2 rounded-full w-fit mx-auto border-2 border-[#E6D8C4]">
+      {/* <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-3 sm:px-4 py-1 sm:py-2 rounded-full w-fit mx-auto border-2 border-[#E6D8C4]">
         <img
           src="/trusted.png"
           alt="Trusted"
@@ -170,10 +170,10 @@ export const PricingSection = () => {
         <span className="text-xs sm:text-sm text-[#634910]">
           2,487 Happy Users
         </span>
-      </div>
+      </div> */}
 
       {/* Features List */}
-      <div className="text-left mb-10 sm:mb-12">
+      {/* <div className="text-left mb-10 sm:mb-12">
         <h3 className="text-center font-bold text-xl sm:text-2xl mb-2 mt-5">
           What's included?
         </h3>
@@ -188,7 +188,7 @@ export const PricingSection = () => {
               className="relative rounded-2xl overflow-hidden cursor-pointer transition-all hover:scale-105 hover:shadow-xl group bg-gray-100 aspect-[3/4]"
             >
               {/* Background Image */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80">
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80">
                 <img
                   src={theme.image}
                   alt={theme.name}
@@ -197,27 +197,27 @@ export const PricingSection = () => {
                     e.target.style.display = "none";
                   }}
                 />
-              </div>
+              </div> */}
 
-              {/* Badge */}
-              {theme.badge && (
+      {/* Badge */}
+      {/* {theme.badge && (
                 <span className="absolute top-3 right-3 text-[10px] bg-green-500 text-white px-2.5 py-1 rounded-md font-bold uppercase tracking-tight">
                   {theme.badge}
                 </span>
-              )}
+              )} */}
 
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 text-left">
+      {/* Content */}
+      {/* <div className="absolute bottom-0 left-0 right-0 p-4 text-left">
                 <h3 className="font-bold text-white text-lg mb-1">
                   {theme.name}
                 </h3>
                 <p className="text-xs text-white/80 font-medium">
                   {theme.subtitle}
                 </p>
-              </div>
+              </div> */}
 
-              {/* Hover Arrow */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+      {/* Hover Arrow */}
+      {/* <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
                   <svg
                     className="w-6 h-6 text-white"
@@ -234,10 +234,10 @@ export const PricingSection = () => {
                   </svg>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            </div> */}
+      {/* ))}
+        </div> */}
+      {/* </div> */}
 
       {/* Pricing Cards */}
       <div className="space-y-5 mb-8 max-w-2xl mx-auto">

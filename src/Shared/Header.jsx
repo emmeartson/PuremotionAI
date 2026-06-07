@@ -88,8 +88,8 @@ function Header() {
 
       {/* Main Header Responsive */}
       <header className="bg-white border-b border-amber-900/20 shadow-sm">
-        <div className="max-w-9xl mx-2 sm:mx-8 md:mx-16 px-2 sm:px-4 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
-          <div className="flex items-center gap-4 sm:gap-8 w-full sm:w-auto justify-center sm:justify-start">
+        <div className="max-w-9xl mx-2 sm:mx-8 md:mx-16 px-2 sm:px-4 py-3 sm:py-4 flex flex-row items-center justify-between gap-0">
+          <div className="flex items-center gap-4 sm:gap-8 w-auto justify-start">
             <div className="flex items-center gap-2 sm:gap-3">
               <Link to="/" className="flex items-center gap-2">
                 <img
@@ -132,7 +132,7 @@ function Header() {
               FAQ
             </a>
           </nav> */}
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-end mt-2 sm:mt-0">
+          <div className="flex items-center gap-2 sm:gap-3 w-auto justify-end">
             {user ? (
               <div className="relative">
                 <button
@@ -184,7 +184,7 @@ function Header() {
               </div>
             ) : (
               <Button
-                className="w-full sm:w-auto"
+                className="w-auto"
                 onClick={() => navigate("/step-login")}
               >
                 Sign In

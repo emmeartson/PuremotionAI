@@ -6,6 +6,8 @@ import AnnouncementBar from "../../Shared/AnnouncementBar";
 import Footer from "../../Shared/Footer";
 import Testimonials from "./Testimonials";
 import { Link } from "react-router-dom";
+import PricingHero from "./PricingHero";
+import Chooseyourmemoryplan from "./Chooseyourmemoryplan";
 
 export default function PricingPage() {
   return (
@@ -21,14 +23,18 @@ export default function PricingPage() {
       </Link>
 
       <main>
-        <PricingSection />
-        <StatsSection />
+        <PricingHero />
+        <Chooseyourmemoryplan />
+
+        {/* <PricingSection /> */}
+        {/* <StatsSection /> */}
         <WhyChoose />
         <Testimonials />
       </main>
 
       {/* Simple Mini-Footer as seen in design */}
       <Footer />
+
     </div>
   );
 }

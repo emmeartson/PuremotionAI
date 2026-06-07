@@ -88,7 +88,7 @@ function Hero() {
           </div>
 
           {/* Right side: Overlapping photo/video cards */}
-          <div className="relative mb-8 md:mb-0 md:mt-0 order-first md:order-last lg:pl-2">
+          <div className="relative mb-8 md:mb-0 md:mt-0 lg:pl-2">
             {/* Decorative blurred glow circles */}
             <div className="absolute -left-6 -top-6 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute -bottom-10 -right-6 h-60 w-60 rounded-full bg-primary/15 blur-3xl" />
