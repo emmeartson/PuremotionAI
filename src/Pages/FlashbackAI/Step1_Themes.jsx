@@ -1,13 +1,13 @@
 import React from "react";
 import { Check } from "lucide-react";
-import ReliveImg from "../../../public/ReliveMoment.gif";
+import ReliveImg from "../../../public/ReliveMoment.mp4";
 import Agesightimg from "../../../public/AgeShift.gif";
 import CartoonImg from "../../../public/Cartoon_Moment.gif";
 import PolaroidImg from "../../../public/polaroid.jpg";
-import FutureBabyImg from "../../../public/TurnDrawingAlive.gif";
+import FutureBabyImg from "../../../public/TurnDrawingAlive.mp4";
 import WeddingImg from "../../../public/WeddingMoment.gif";
 import ValentineImg from "../../../public/ValentineMoment.gif";
-import DogVideoImg from "../../../public/PetMoment.gif";
+import DogVideoImg from "../../../public/PetMoment.mp4";
 
 const themes = [
   {
@@ -82,14 +82,25 @@ export const Step1_Themes = ({ onSelectTheme }) => (
         >
           {/* Background Image */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80">
-            <img
-              src={theme.image}
-              alt={theme.name}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.style.display = "none";
-              }}
-            />
+            {theme.image && theme.image.toLowerCase().endsWith(".mp4") ? (
+              <video
+                src={theme.image}
+                className="w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            ) : (
+              <img
+                src={theme.image}
+                alt={theme.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
+              />
+            )}
           </div>
 
           {/* Badge */}

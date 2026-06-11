@@ -17,14 +17,14 @@ import { Button } from "../FlashbackAI/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { subscriptionCheckout } from "../../Redux/Subscription";
-import ReliveImg from "../../../public/ReliveMoment.gif";
+import ReliveImg from "../../../public/ReliveMoment.mp4";
 import Agesightimg from "../../../public/AgeShift.gif";
 import CartoonImg from "../../../public/Cartoon_Moment.gif";
 import PolaroidImg from "../../../public/polaroid.jpg";
-import FutureBabyImg from "../../../public/TurnDrawingAlive.gif";
+import FutureBabyImg from "../../../public/TurnDrawingAlive.mp4";
 import WeddingImg from "../../../public/WeddingMoment.gif";
 import ValentineImg from "../../../public/ValentineMoment.gif";
-import DogVideoImg from "../../../public/PetMoment.gif";
+import DogVideoImg from "../../../public/PetMoment.mp4";
 import { BsStarFill } from "react-icons/bs";
 
 const themes = [
