@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsStarFill } from "react-icons/bs";
 import Button from "../../Shared/Button";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -24,6 +24,13 @@ const memoryFrames = [
 
 function Hero() {
   const navigate = useNavigate();
+  const [videosReady, setVideosReady] = useState(false);
+
+  // Defer video loading until after initial paint
+  useEffect(() => {
+    const timer = setTimeout(() => setVideosReady(true), 150);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <section className="bg-white py-8 sm:py-10 md:py-20">
       <div className="max-w-full mx-2 sm:mx-4 md:mx-12 px-2 sm:px-4 md:px-8">
@@ -107,13 +114,13 @@ function Hero() {
                   {memoryVideos.map((v, i) => (
                     <video
                       key={i}
-                      src={v.video}
+                      src={videosReady ? v.video : undefined}
                       poster={v.poster}
                       autoPlay
                       loop
                       muted
                       playsInline
-                      preload="auto"
+                      preload={videosReady ? "auto" : "none"}
                       className="h-full w-full rounded-lg object-cover"
                     />
                   ))}
@@ -180,21 +187,33 @@ function Hero() {
             <img
               src="/newyork.png"
               alt="New York"
+              loading="lazy"
+              width="200"
+              height="80"
               className="h-10 sm:h-16 md:h-20 object-contain hover:scale-105 transition-transform duration-300"
             />
             <img
               src="/bbc.png"
               alt="BBC"
+              loading="lazy"
+              width="200"
+              height="80"
               className="h-10 sm:h-16 md:h-20 object-contain hover:scale-105 transition-transform duration-300"
             />
             <img
               src="/healthline.png"
               alt="Healthline"
+              loading="lazy"
+              width="200"
+              height="80"
               className="h-10 sm:h-16 md:h-20 object-contain hover:scale-105 transition-transform duration-300"
             />
             <img
               src="/businessinsider.jpg"
               alt="Business Insider"
+              loading="lazy"
+              width="200"
+              height="80"
               className="h-10 sm:h-16 md:h-20 object-contain hover:scale-105 transition-transform duration-300"
             />
           </div>

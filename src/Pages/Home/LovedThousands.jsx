@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "../../Shared/Button";
 import { FaArrowRight } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,39 @@ import liam from "../../../public/Liam G..jpg";
 import jonas from "../../../public/Jonas K..jpg";
 import hannah from "../../../public/Hannah P..jpg";
 import elise from "../../../public/Elise D.jpg";
+
+// Lazy-loading video component: only loads src when in viewport
+function LazyVideo({ src, poster, className, ...props }) {
+  const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      src={isVisible ? src : undefined}
+      poster={poster}
+      preload={isVisible ? "metadata" : "none"}
+      className={className}
+      {...props}
+    />
+  );
+}
 
 const testimonials = [
   {
@@ -113,14 +146,13 @@ function LovedThousands() {
                   <img src={t.before} alt={`${t.name} original memory`} loading="lazy" className="h-full w-full object-cover grayscale" />
                 </div>
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[18px] bg-[#2B2118]">
-                  <video
+                  <LazyVideo
                     src={t.video}
                     poster={t.after}
                     autoPlay
                     loop
                     muted
                     playsInline
-                    preload="metadata"
                     className="h-full w-full object-cover"
                   />
                   <span className="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur-sm">

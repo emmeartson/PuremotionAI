@@ -1,32 +1,43 @@
 import { createBrowserRouter } from "react-router-dom";
+import React, { Suspense, lazy } from "react";
 import Home from "../Pages/Home/Home";
-import FlashbackFlow from "../Pages/FlashbackAI/FlashbackOnboarding";
-import FlashbackOnboarding from "../Pages/FlashbackAI/FlashbackOnboarding";
-import { Step5_Login } from "../Pages/FlashbackAI/Step5_Login";
-import { Step_PreviewReady } from "../Pages/FlashbackAI/Step_PreviewReady";
-import PricingPage from "../Pages/Pricing/PricingPage";
-import LoginPage from "../Pages/Authentication/SignIn";
-import Dashboard from "../Pages/Dashboard/Dashboard";
-import { GetCreditPage } from "../Pages/Dashboard/GetCreditPage";
-import { DashboardLayout } from "../Pages/Dashboard/DashboardLayout";
-import { DashboardHome } from "../Pages/Dashboard/DashboardHome";
-import { InviteFriendsPage } from "../Pages/Dashboard/InviteFriendsPage";
-import { MomentsGallery } from "../Pages/Dashboard/MomentsGallery";
-import { ProfileSettingsPage } from "../Pages/Dashboard/ProfileSettingsPage";
-import GetCoinPage2 from "../Pages/Dashboard/GetCoinPage2";
-import Questions from "../Pages/Dashboard/Survey/Questions";
-import ThankYouPage from "../Pages/Dashboard/Survey/Thankyou";
-import UpsalePage from "../Pages/Pricing/UpsalePage";
-import BestDeal from "../Pages/Pricing/BestDeal";
-import DashboardFlashbackFlow from "../Pages/Dashboard/DashboardFlashbackFlow";
-import FinalResult from "../Pages/Dashboard/FinalResult";
 import { ProtectedRoute } from "./ProtectedRoute";
-import ContactForm from "../Pages/Home/ContactForm";
-import PrivacyPolicy from "../Shared/PrivacyPolicy";
-import TnC from "../Shared/TnC";
-import Test from "../Pages/Dashboard/test";
-import PaymentTestPage from "../Pages/Stripe/PaymentTestPage";
-import Step_onlyemail from "../Pages/FlashbackAI/Step_onlyemail";
+
+// Lazy-loaded routes — these won't be included in the initial JS bundle
+const FlashbackOnboarding = lazy(() => import("../Pages/FlashbackAI/FlashbackOnboarding"));
+const Step5_Login = lazy(() => import("../Pages/FlashbackAI/Step5_Login").then(m => ({ default: m.Step5_Login })));
+const Step_PreviewReady = lazy(() => import("../Pages/FlashbackAI/Step_PreviewReady").then(m => ({ default: m.Step_PreviewReady })));
+const PricingPage = lazy(() => import("../Pages/Pricing/PricingPage"));
+const LoginPage = lazy(() => import("../Pages/Authentication/SignIn"));
+const GetCreditPage = lazy(() => import("../Pages/Dashboard/GetCreditPage").then(m => ({ default: m.GetCreditPage })));
+const DashboardLayout = lazy(() => import("../Pages/Dashboard/DashboardLayout").then(m => ({ default: m.DashboardLayout })));
+const DashboardHome = lazy(() => import("../Pages/Dashboard/DashboardHome").then(m => ({ default: m.DashboardHome })));
+const InviteFriendsPage = lazy(() => import("../Pages/Dashboard/InviteFriendsPage").then(m => ({ default: m.InviteFriendsPage })));
+const MomentsGallery = lazy(() => import("../Pages/Dashboard/MomentsGallery").then(m => ({ default: m.MomentsGallery })));
+const ProfileSettingsPage = lazy(() => import("../Pages/Dashboard/ProfileSettingsPage").then(m => ({ default: m.ProfileSettingsPage })));
+const GetCoinPage2 = lazy(() => import("../Pages/Dashboard/GetCoinPage2"));
+const Questions = lazy(() => import("../Pages/Dashboard/Survey/Questions"));
+const ThankYouPage = lazy(() => import("../Pages/Dashboard/Survey/Thankyou"));
+const UpsalePage = lazy(() => import("../Pages/Pricing/UpsalePage"));
+const BestDeal = lazy(() => import("../Pages/Pricing/BestDeal"));
+const DashboardFlashbackFlow = lazy(() => import("../Pages/Dashboard/DashboardFlashbackFlow"));
+const FinalResult = lazy(() => import("../Pages/Dashboard/FinalResult"));
+const ContactForm = lazy(() => import("../Pages/Home/ContactForm"));
+const PrivacyPolicy = lazy(() => import("../Shared/PrivacyPolicy"));
+const TnC = lazy(() => import("../Shared/TnC"));
+const Test = lazy(() => import("../Pages/Dashboard/test"));
+const PaymentTestPage = lazy(() => import("../Pages/Stripe/PaymentTestPage"));
+const Step_onlyemail = lazy(() => import("../Pages/FlashbackAI/Step_onlyemail"));
+
+// Minimal loading fallback — keeps CLS low
+const PageLoader = () => (
+  <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "60vh" }}>
+    <div style={{ width: 32, height: 32, border: "3px solid #E8D9B8", borderTopColor: "#8B6A2B", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+);
+
+const L = ({ children }) => <Suspense fallback={<PageLoader />}>{children}</Suspense>;
 
 export const router = createBrowserRouter([
   {
@@ -35,48 +46,48 @@ export const router = createBrowserRouter([
   },
   {
     path: "/flashback",
-    element: <FlashbackOnboarding />,
+    element: <L><FlashbackOnboarding /></L>,
   },
   {
     path: "/step-login",
-    element: <Step_onlyemail />,
+    element: <L><Step_onlyemail /></L>,
   },
   // {
   //   path: "/step-login",
-  //   element: <Step5_Login />,
+  //   element: <L><Step5_Login /></L>,
   // },
   {
     path: "/step-preview",
-    element: <Step_PreviewReady />,
+    element: <L><Step_PreviewReady /></L>,
   },
   {
     path: "/test",
-    element: <Test />,
+    element: <L><Test /></L>,
   },
   {
     path: "/pricing",
-    element: <PricingPage />,
+    element: <L><PricingPage /></L>,
   },
   {
     path: "/upsale",
-    element: <UpsalePage />,
+    element: <L><UpsalePage /></L>,
   },
   {
     path: "/best-deal",
-    element: <BestDeal />,
+    element: <L><BestDeal /></L>,
   },
 
   {
     path: "/contact",
-    element: <ContactForm />,
+    element: <L><ContactForm /></L>,
   },
   {
     path: "/privacy-policy",
-    element: <PrivacyPolicy />,
+    element: <L><PrivacyPolicy /></L>,
   },
   {
     path: "/terms-of-service",
-    element: <TnC />,
+    element: <L><TnC /></L>,
   },
   {
     path: "*",
@@ -84,55 +95,55 @@ export const router = createBrowserRouter([
   },
   {
     path: "/payment-test",
-    element: <PaymentTestPage />,
+    element: <L><PaymentTestPage /></L>,
   },
   {
     path: "/dashboard",
     element: (
       <ProtectedRoute>
-        <DashboardLayout />
+        <L><DashboardLayout /></L>
       </ProtectedRoute>
     ),
     children: [
       {
         index: true,
-        element: <DashboardHome />,
+        element: <L><DashboardHome /></L>,
       },
       {
         path: "create-moment",
-        element: <DashboardFlashbackFlow />,
+        element: <L><DashboardFlashbackFlow /></L>,
       },
       {
         path: "final-result",
-        element: <FinalResult />,
+        element: <L><FinalResult /></L>,
       },
       {
         path: "get-Credit",
-        element: <GetCreditPage />,
+        element: <L><GetCreditPage /></L>,
       },
       {
         path: "got-Credit",
-        element: <GetCoinPage2 />,
+        element: <L><GetCoinPage2 /></L>,
       },
       {
         path: "invite",
-        element: <InviteFriendsPage />,
+        element: <L><InviteFriendsPage /></L>,
       },
       {
         path: "moments",
-        element: <MomentsGallery />,
+        element: <L><MomentsGallery /></L>,
       },
       {
         path: "survey",
-        element: <Questions />,
+        element: <L><Questions /></L>,
       },
       {
         path: "thankyou",
-        element: <ThankYouPage />,
+        element: <L><ThankYouPage /></L>,
       },
       {
         path: "settings",
-        element: <ProfileSettingsPage />,
+        element: <L><ProfileSettingsPage /></L>,
       },
 
     ],

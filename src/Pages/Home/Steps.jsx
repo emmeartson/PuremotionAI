@@ -38,6 +38,7 @@ function Steps() {
           <img
             src="/step1.png"
             alt="Upload Your Photo"
+            loading="lazy"
             className="rounded-xl mb-2 sm:mb-4 w-full h-[180px] sm:h-[320px] md:h-[500px] object-contain sm:object-cover"
           />
           <div className="flex items-center gap-1 sm:gap-2 mt-auto">
@@ -64,6 +65,7 @@ function Steps() {
           <img
             src="/step2.png"
             alt="Select Your Animation Style"
+            loading="lazy"
             className="rounded-xl mb-2 sm:mb-4 w-full h-[180px] sm:h-[320px] md:h-[500px] object-contain sm:object-cover"
           />
           <div className="flex items-center gap-1 sm:gap-2 mt-auto">
@@ -90,6 +92,7 @@ function Steps() {
           <img
             src="/step3.png"
             alt="Select Animation Style"
+            loading="lazy"
             className="rounded-xl mb-2 sm:mb-4 w-full h-[200px] sm:h-[340px] md:h-[540px] object-contain sm:object-cover"
           />
           <div className="flex items-center gap-1 sm:gap-2 mt-auto">

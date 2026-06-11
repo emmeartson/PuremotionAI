@@ -3,15 +3,18 @@ import React from "react";
 function Result() {
   return (
     <div
-      className="max-w-7xl rounded-3xl overflow-hidden my-10 justify-center mx-2 sm:mx-4 md:mx-auto"
-      style={{
-        backgroundImage: "url(/resultbg.png)",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        minHeight: 420,
-      }}
+      className="relative max-w-7xl rounded-3xl overflow-hidden my-10 justify-center mx-2 sm:mx-4 md:mx-auto"
+      style={{ minHeight: 420 }}
     >
-      <div className="w-full max-w-7xl mx-auto flex flex-col justify-center items-center px-4 sm:px-8 md:px-24 py-10 sm:py-16 md:py-24">
+      {/* Background image — lazy loaded, positioned behind content */}
+      <img
+        src="/resultbg.png"
+        alt=""
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover"
+        aria-hidden="true"
+      />
+      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col justify-center items-center px-4 sm:px-8 md:px-24 py-10 sm:py-16 md:py-24">
         <h2
           className="text-white text-2xl sm:text-3xl md:text-5xl font-extrabold mb-3 text-center md:text-left w-full max-w-7xl"
           style={{ textShadow: "0 2px 8px rgba(0,0,0,0.25)" }}
