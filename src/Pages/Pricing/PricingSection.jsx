@@ -314,6 +314,7 @@ export const PricingSection = () => {
         <FaCheckCircle size={14} className="text-green-500" /> Secure checkout  •  Cancel anytime  •  14-day money-back guarantee
       </div>
 
+
       {/* Payment Icons */}
       <div className="flex justify-center gap-3  mb-6">
         <img src="/payments.png" className="h-16" alt="Visa" />

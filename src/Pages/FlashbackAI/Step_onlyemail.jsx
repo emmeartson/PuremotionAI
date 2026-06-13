@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerOrLogin } from "../../Redux/OnlyemailCreateacc";
 import { authService } from "../../Redux/Auth";
 import { googleLoginOnly } from "../../Redux/GoogleauthforLoginonly";
+import { trackLead } from "../../utils/metaPixel";
 
 export const Step_onlyemail = ({ onNext }) => {
   const navigate = useNavigate();
@@ -165,6 +166,9 @@ export const Step_onlyemail = ({ onNext }) => {
         localStorage.setItem("user_info", JSON.stringify(response.user));
       }
       localStorage.setItem("login_response", JSON.stringify(response));
+
+      // Fire Meta Pixel Lead event after successful email submission
+      trackLead();
       
       if (onNext) {
         onNext(email);

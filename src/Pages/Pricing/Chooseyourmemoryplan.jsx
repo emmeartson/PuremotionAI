@@ -74,8 +74,8 @@ export default function Chooseyourmemoryplan() {
                                     type="button"
                                     onClick={() => setSelected(p.id)}
                                     className={`flex w-full items-center justify-between gap-4 rounded-2xl bg-white px-6 py-5 text-left transition-all sm:px-8 sm:py-6 ${isSelected
-                                            ? "border-2 border-[#8B6A2B] shadow-[0_20px_50px_-20px_rgba(139,106,43,0.45)]"
-                                            : "border border-gray-200 shadow-sm hover:border-[#8B6A2B]/50"
+                                        ? "border-2 border-[#8B6A2B] shadow-[0_20px_50px_-20px_rgba(139,106,43,0.45)]"
+                                        : "border border-gray-200 shadow-sm hover:border-[#8B6A2B]/50"
                                         }`}
                                 >
                                     <div className="min-w-0">
@@ -111,6 +111,10 @@ export default function Chooseyourmemoryplan() {
                         </span>
                         Secure checkout
                     </p>
+                    <div className="text-sm text-gray-600 font-extrabold text-center">
+                        Prices shown in AUD. <br />Checkout will display your local currency.
+                    </div>
+
                     <div className="flex justify-center gap-3">
                         <img src="/payments.png" className="h-10 sm:h-12 object-contain" alt="Payments" />
                     </div>
