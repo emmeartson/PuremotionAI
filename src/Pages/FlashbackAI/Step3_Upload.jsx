@@ -3,6 +3,8 @@ import { Star, Camera, Check, X, Clock } from "lucide-react";
 import trusted from "../../../public/trusted.png";
 import { BsStarFill } from "react-icons/bs";
 import { trackAddToCart } from "../../utils/metaPixel";
+import imageCompression from 'browser-image-compression';
+import heic2any from 'heic2any';
 
 export const Step3_Upload = ({ onNext, selectedTheme }) => {
   const requiresTwoImages = selectedTheme?.requiresTwoImages || false;
@@ -10,19 +12,22 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
   const [isLong, setIsLong] = useState(false); // false = 4 seconds, true = 8 seconds
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileTypeError, setFileTypeError] = useState("");
+  const [isCompressing, setIsCompressing] = useState(false);
   const fileInputRef = useRef(null);
   const submitLockRef = useRef(false);
 
   const maxFiles = requiresTwoImages ? 2 : 1;
-  const allowedImageTypes = ["image/jpeg", "image/png"];
-  const maxFileSizeBytes = 1 * 1024 * 1024;
+  const allowedImageTypes = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
+  const maxFileSizeBytes = 30 * 1024 * 1024;
 
   const filterAllowedFiles = (files) => {
     let invalidTypeCount = 0;
     let oversizedCount = 0;
 
     const validFiles = files.filter((file) => {
-      const isAllowedType = allowedImageTypes.includes(file.type);
+      const extension = file.name.split('.').pop().toLowerCase();
+      const isHeic = extension === 'heic' || extension === 'heif';
+      const isAllowedType = allowedImageTypes.includes(file.type) || isHeic;
       const isAllowedSize = file.size <= maxFileSizeBytes;
 
       if (!isAllowedType) invalidTypeCount += 1;
@@ -33,10 +38,10 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
 
     const errorMessages = [];
     if (invalidTypeCount > 0) {
-      errorMessages.push("Only JPG and PNG images are allowed.");
+      errorMessages.push("Only JPG, PNG, WEBP, and HEIC images are allowed.");
     }
     if (oversizedCount > 0) {
-      errorMessages.push("Each image must be 1 MB or smaller.");
+      errorMessages.push("Each image must be 30 MB or smaller.");
     }
 
     setFileTypeError(errorMessages.join(" "));
@@ -44,13 +49,62 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
     return validFiles;
   };
 
-  const handleFileSelect = (e) => {
+  const processAndCompressFiles = async (files) => {
+    setIsCompressing(true);
+    const processedFiles = [];
+    for (const file of files) {
+      try {
+        let fileToCompress = file;
+        const extension = file.name.split('.').pop().toLowerCase();
+
+        if (extension === 'heic' || extension === 'heif' || file.type === 'image/heic' || file.type === 'image/heif') {
+          const convertedBlob = await heic2any({
+            blob: file,
+            toType: "image/jpeg",
+            quality: 0.8
+          });
+          fileToCompress = new File(
+            [Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob],
+            file.name.replace(/\.(heic|heif)$/i, '.jpg'),
+            { type: "image/jpeg" }
+          );
+        }
+
+        const options = {
+          maxSizeMB: 3,
+          maxWidthOrHeight: 4096,
+          useWebWorker: true,
+          fileType: fileToCompress.type
+        };
+        let compressedFile = await imageCompression(fileToCompress, options);
+
+        // Ensure the file maintains its original name and exact type for the backend
+        compressedFile = new File([compressedFile], fileToCompress.name, {
+          type: fileToCompress.type,
+          lastModified: Date.now(),
+        });
+
+        processedFiles.push(compressedFile);
+      } catch (error) {
+        console.error("Error processing file:", error);
+        setFileTypeError("Error processing some images. Please try again with a different format.");
+      }
+    }
+    setIsCompressing(false);
+    return processedFiles;
+  };
+
+  const handleFileSelect = async (e) => {
     const files = Array.from(e.target.files);
     const validFiles = filterAllowedFiles(files);
 
     if (validFiles.length > 0) {
-      const newFiles = [...uploadedFiles, ...validFiles].slice(0, maxFiles);
-      setUploadedFiles(newFiles);
+      const remainingSlots = maxFiles - uploadedFiles.length;
+      if (remainingSlots > 0) {
+        const filesToProcess = validFiles.slice(0, remainingSlots);
+        const compressedFiles = await processAndCompressFiles(filesToProcess);
+        setUploadedFiles(prev => [...prev, ...compressedFiles]);
+      }
     }
 
     e.target.value = "";
@@ -61,7 +115,7 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
     fileInputRef.current?.click();
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -69,8 +123,12 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
     const validFiles = filterAllowedFiles(files);
 
     if (validFiles.length > 0) {
-      const newFiles = [...uploadedFiles, ...validFiles].slice(0, maxFiles);
-      setUploadedFiles(newFiles);
+      const remainingSlots = maxFiles - uploadedFiles.length;
+      if (remainingSlots > 0) {
+        const filesToProcess = validFiles.slice(0, remainingSlots);
+        const compressedFiles = await processAndCompressFiles(filesToProcess);
+        setUploadedFiles(prev => [...prev, ...compressedFiles]);
+      }
     }
   };
 
@@ -164,27 +222,38 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
         <input
           ref={fileInputRef}
           type="file"
-          accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+          accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/jpeg,image/png,image/webp,image/heic,image/heif"
           multiple={requiresTwoImages}
           onChange={handleFileSelect}
           className="hidden"
+          disabled={isCompressing}
         />
 
         {uploadedFiles.length === 0 ? (
           <>
-            <div className="bg-gray-50 w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-              <Camera className="text-gray-400" size={28} />
-            </div>
-            <p className="text-gray-600 font-semibold mb-1">
-              Drag & drop your {requiresTwoImages ? "photos" : "photo"} here
-            </p>
-            <p className="text-gray-400 text-sm mb-6 font-medium">Or</p>
-            <button
-              onClick={handleBrowseClick}
-              className="bg-[#7c602e] text-white px-10 py-2.5 rounded-xl text-sm font-semibold shadow-md hover:bg-[#6b5127] transition-colors"
-            >
-              Browse
-            </button>
+            {isCompressing ? (
+              <div className="flex flex-col items-center justify-center py-8">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7c602e] mb-4"></div>
+                <p className="text-gray-600 font-semibold">Processing image(s)...</p>
+              </div>
+            ) : (
+              <>
+                <div className="bg-gray-50 w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Camera className="text-gray-400" size={28} />
+                </div>
+                <p className="text-gray-600 font-semibold mb-1">
+                  Drag & drop your {requiresTwoImages ? "photos" : "photo"} here
+                </p>
+                <p className="text-gray-400 text-sm mb-6 font-medium">Or</p>
+                <button
+                  onClick={handleBrowseClick}
+                  disabled={isCompressing}
+                  className="bg-[#7c602e] text-white px-10 py-2.5 rounded-xl text-sm font-semibold shadow-md hover:bg-[#6b5127] transition-colors"
+                >
+                  Browse
+                </button>
+              </>
+            )}
           </>
         ) : (
           <div className="space-y-4">
@@ -198,7 +267,8 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
                   />
                   <button
                     onClick={() => removeFile(index)}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover/item:opacity-100 transition-opacity"
+                    disabled={isCompressing}
+                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover/item:opacity-100 transition-opacity disabled:opacity-50"
                   >
                     <X size={16} />
                   </button>
@@ -210,16 +280,16 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
 
               {uploadedFiles.length < maxFiles && (
                 <div
-                  onClick={handleBrowseClick}
-                  className="w-full h-40 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#7c602e] hover:bg-gray-50 transition-all"
+                  onClick={!isCompressing ? handleBrowseClick : undefined}
+                  className={`w-full h-40 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center transition-all ${isCompressing ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-[#7c602e] hover:bg-gray-50'}`}
                 >
-                  <Camera className="text-gray-400 mb-2" size={24} />
+                  {isCompressing ? (
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7c602e] mb-2"></div>
+                  ) : (
+                    <Camera className="text-gray-400 mb-2" size={24} />
+                  )}
                   <p className="text-xs text-gray-500 font-medium">
-                    Add{" "}
-                    {requiresTwoImages && uploadedFiles.length === 1
-                      ? "second"
-                      : "another"}{" "}
-                    photo
+                    {isCompressing ? "Processing..." : `Add ${requiresTwoImages && uploadedFiles.length === 1 ? "second" : "another"} photo`}
                   </p>
                 </div>
               )}
@@ -228,12 +298,11 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
             {canProceed && (
               <button
                 onClick={handleContinue}
-                disabled={isSubmitting}
-                className={`px-10 py-2.5 rounded-xl text-sm font-semibold shadow-md transition-colors mt-6 ${
-                  isSubmitting
-                    ? "bg-[#8f7a53] text-white cursor-not-allowed"
-                    : "bg-[#7c602e] text-white hover:bg-[#6b5127]"
-                }`}
+                disabled={isSubmitting || isCompressing}
+                className={`px-10 py-2.5 rounded-xl text-sm font-semibold shadow-md transition-colors mt-6 ${(isSubmitting || isCompressing)
+                  ? "bg-[#8f7a53] text-white cursor-not-allowed"
+                  : "bg-[#7c602e] text-white hover:bg-[#6b5127]"
+                  }`}
               >
                 {isSubmitting ? "Uploading..." : "Continue"}
               </button>
@@ -243,7 +312,7 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
       </div>
 
       <p className="text-xs text-gray-500 mb-3">
-        Allowed: JPG, PNG. Max size: 1 MB per photo.
+        Most photos from your phone will work. (Supported: JPG, PNG, WEBP, HEIC. Max size: 30MB)
       </p>
 
       {fileTypeError && (
@@ -283,21 +352,19 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
         <div className="flex items-center justify-center gap-3">
           <button
             onClick={() => setIsLong(false)}
-            className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-              !isLong
-                ? "bg-[#7c602e] text-white shadow-md"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
+            className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${!isLong
+              ? "bg-[#7c602e] text-white shadow-md"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
           >
             4 Seconds
           </button>
           <button
             onClick={() => setIsLong(true)}
-            className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-              isLong
-                ? "bg-[#7c602e] text-white shadow-md"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
+            className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${isLong
+              ? "bg-[#7c602e] text-white shadow-md"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
           >
             8 Seconds <span className="text-xs opacity-75">(1+ credit)</span>
           </button>
