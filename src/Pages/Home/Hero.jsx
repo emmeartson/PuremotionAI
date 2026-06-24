@@ -10,16 +10,16 @@ import trusted from "../../../public/trusted.png";
 
 const memoryVideos = [
   { video: "/memory-1-color.mp4", poster: "/frame-1.jpg" },
-  { video: "/memory-2-color.mp4", poster: "/frame-2.jpg" },
-  { video: "/memory-3-color.mp4", poster: "/frame-3.jpg" },
-  { video: "/memory-4-color.mp4", poster: "/frame-4.jpg" },
+  { video: "/wedding-motion.mp4", poster: "/wedding.jpg" },
+  { video: "/child-bubbles-motion.mp4", poster: "/child-bubbles.jpg" },
+  { video: "/pet-motion.mp4", poster: "/pet.jpg" },
 ];
 
 const memoryFrames = [
   "/frame-1.jpg",
-  "/frame-2.jpg",
-  "/frame-3.jpg",
-  "/frame-4.jpg",
+  "/wedding.jpg",
+  "/child-bubbles.jpg",
+  "/pet.jpg",
 ];
 
 function Hero() {
@@ -36,11 +36,11 @@ function Hero() {
       <div className="max-w-full mx-2 sm:mx-4 md:mx-12 px-2 sm:px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
           <div className="space-y-5 sm:space-y-6">
-            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight text-center md:text-left">
-              Every Photo Has a Story.
+            <h1 className="text-2xl sm:text-3xl md:text-xl lg:text-7xl  text-gray-900 leading-tight text-center md:text-left">
+              Turn Any Photo Into A
             </h1>
-            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-[#634910] leading-tight text-center md:text-left">
-              We Bring It Back to Life.
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl  text-[#634910] leading-tight text-center md:text-left italic">
+              Living Memory
             </h1>
 
             <div className="flex flex-row flex-nowrap items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-full w-full sm:w-fit border-2 border-[#E6D8C4] justify-center sm:justify-start md:justify-start overflow-x-auto sm:overflow-x-visible">
@@ -69,10 +69,8 @@ function Hero() {
                 </span>
               </div>
             </div>
-            <p className="text-base sm:text-lg md:text-xl text-black leading-relaxed">
-              Turn your cherished photos into living memories. PureMotion gently
-              reanimates the moments you love, bringing you closer to the
-              stories behind every image.
+            <p className="text-base sm:text-lg md:text-xl text-slate-500 leading-relaxed">
+              Upload a photo and watch it come alive with realistic motion, restored detail, and emotional moments you'll treasure forever.
             </p>
 
             <div className="pt-2 sm:pt-4">
@@ -80,7 +78,7 @@ function Hero() {
                 variant="primary"
                 size="lg"
                 className="w-full sm:w-auto hover:bg-amber-800 text-white px-4 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-base"
-                onClick={() => navigate("/flashback")}
+                onClick={() => navigate("/quiz")}
               >
                 <span className="mr-2">Bring My Photo to Life</span>
                 <span className="inline-flex items-center justify-center bg-amber-900/20 rounded-full p-1 text-sm">
@@ -95,25 +93,14 @@ function Hero() {
           </div>
 
           {/* Right side: Overlapping photo/video cards */}
-          <div className="relative mb-8 md:mb-0 md:mt-0 lg:pl-2">
-            {/* Decorative blurred glow circles */}
+          <div className="relative fade-in mb-8 md:mb-0 md:mt-0 lg:pl-2">
             <div className="absolute -left-6 -top-6 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute -bottom-10 -right-6 h-60 w-60 rounded-full bg-primary/15 blur-3xl" />
-
-            <div className="relative mx-auto w-full max-w-xl pb-8 pt-10">
-              {/* Large colour video card — bottom right */}
-              <div
-                className="relative ml-auto w-[78%] rounded-3xl p-3 ring-1 ring-gray-200"
-                style={{
-                  backgroundColor: "#FDF8F0",
-                  boxShadow:
-                    "0 25px 50px -12px rgba(99, 73, 16, 0.15), 0 12px 24px -8px rgba(99, 73, 16, 0.1)",
-                }}
-              >
-                <div className="grid aspect-square grid-cols-2 grid-rows-2 gap-2 overflow-hidden rounded-2xl">
-                  {memoryVideos.map((v, i) => (
+            <div className="relative mx-auto grid w-full max-w-md grid-cols-2 gap-2.5 sm:max-w-xl sm:gap-4">
+              {memoryVideos.map((v, i) => (
+                <figure key={i} className="relative overflow-hidden rounded-[22px] bg-[#2B2118] p-[5px] shadow-elegant ring-1 ring-black/10 sm:rounded-[26px] sm:p-[8px]">
+                  <div className="relative overflow-hidden rounded-[18px] sm:rounded-[20px]">
                     <video
-                      key={i}
                       src={videosReady ? v.video : undefined}
                       poster={v.poster}
                       autoPlay
@@ -121,60 +108,24 @@ function Hero() {
                       muted
                       playsInline
                       preload={videosReady ? "auto" : "none"}
-                      className="h-full w-full rounded-lg object-cover"
+                      className="block aspect-[3/4] w-full object-cover"
                     />
-                  ))}
-                </div>
-                <div
-                  className="absolute -bottom-3 right-5 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white ring-2"
-                  style={{
-                    backgroundColor: "#1a1a1a",
-                    ringColor: "#FDF8F0",
-                    boxShadow:
-                      "0 25px 50px -12px rgba(99, 73, 16, 0.15), 0 12px 24px -8px rgba(99, 73, 16, 0.1)",
-                  }}
-                >
-                  Brought Gently Back To Life{" "}
-                  <HiSparkles className="h-3.5 w-3.5 text-primary" />
-                </div>
-              </div>
-
-              {/* Small grayscale card — top left, overlapping corner */}
-              <div
-                className="absolute left-0 top-0 z-10 w-[40%] rounded-2xl p-2 ring-1 ring-gray-200"
-                style={{
-                  transform: "rotate(-5deg)",
-                  backgroundColor: "#FDF8F0",
-                  boxShadow:
-                    "0 25px 50px -12px rgba(99, 73, 16, 0.15), 0 12px 24px -8px rgba(99, 73, 16, 0.1)",
-                }}
-              >
-                <div className="grid aspect-square grid-cols-2 grid-rows-2 gap-1.5 overflow-hidden rounded-xl">
-                  {memoryFrames.map((src, i) => (
-                    <img
-                      key={i}
-                      src={src}
-                      alt={`Memory still ${i + 1}`}
-                      width={400}
-                      height={400}
-                      className="h-full w-full rounded-md object-cover grayscale sepia"
-                      style={{ filter: "grayscale(1) sepia(0.1)" }}
-                    />
-                  ))}
-                </div>
-                <div
-                  className="absolute -bottom-3 left-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-white ring-2"
-                  style={{
-                    backgroundColor: "#1a1a1a",
-                    ringColor: "#FDF8F0",
-                    boxShadow:
-                      "0 25px 50px -12px rgba(99, 73, 16, 0.15), 0 12px 24px -8px rgba(99, 73, 16, 0.1)",
-                  }}
-                >
-                  A Precious Photo{" "}
-                  <HiCamera className="h-3 w-3 text-primary" />
-                </div>
-              </div>
+                    {/* AFTER badge */}
+                    <span className="absolute left-2 top-2 rounded-full bg-gradient-to-br from-[#C9A227] to-[#8B6A2B] px-2 py-[3px] text-[8.5px] font-bold uppercase tracking-[0.2em] text-white shadow-md sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[10px]">
+                      After
+                    </span>
+                    {/* BEFORE thumbnail */}
+                    <div className="absolute bottom-2 left-2 overflow-hidden rounded-[8px] ring-[1.5px] ring-white shadow-[0_6px_14px_rgba(0,0,0,0.45)] sm:bottom-3 sm:left-3 sm:rounded-[10px]">
+                      <div className="relative h-[50px] w-[38px] sm:h-[68px] sm:w-[52px]">
+                        <img src={memoryFrames[i]} alt={`Memory before ${i + 1}`} className="absolute inset-0 h-full w-full object-cover grayscale" loading="eager" />
+                        <span className="absolute inset-x-0 bottom-0 bg-black/70 py-[2px] text-center text-[6.5px] font-bold uppercase tracking-[0.14em] text-white sm:py-[3px] sm:text-[8px]">
+                          Before
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </figure>
+              ))}
             </div>
           </div>
         </div>

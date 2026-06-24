@@ -28,6 +28,7 @@ const TnC = lazy(() => import("../Shared/TnC"));
 const Test = lazy(() => import("../Pages/Dashboard/test"));
 const PaymentTestPage = lazy(() => import("../Pages/Stripe/PaymentTestPage"));
 const Step_onlyemail = lazy(() => import("../Pages/FlashbackAI/Step_onlyemail"));
+const Quiz = lazy(() => import("../Pages/Home/Quiz"));
 
 // Minimal loading fallback — keeps CLS low
 const PageLoader = () => (
@@ -88,6 +89,10 @@ export const router = createBrowserRouter([
   {
     path: "/terms-of-service",
     element: <L><TnC /></L>,
+  },
+  {
+    path: "/quiz",
+    element: <L><Quiz /></L>,
   },
   {
     path: "*",

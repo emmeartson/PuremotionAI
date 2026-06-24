@@ -54,8 +54,27 @@ export default function FlashbackOnboarding() {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, []);
 
+  // If user is NOT logged in, auto-select "Relive" theme + "Memory Match Motion" style
+  // and skip directly to the upload screen (step 3)
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      // Auto-select Relive theme (matching the theme object shape from Step1_Themes)
+      setSelectedTheme({ id: "relive", name: "Relive" });
+      // Auto-select Memory Match Motion style
+      setSelectedStyle("Memory Match Motion");
+      // Jump directly to upload step
+      setStep(3);
+    }
+  }, []);
+
+  const isGuest = !localStorage.getItem("access_token");
+
   const handleBack = () => {
     if (step === 1) {
+      navigate("/");
+    } else if (isGuest && step <= 3) {
+      // Guest users skipped theme/style, so back from upload goes home
       navigate("/");
     } else if (step > 1) {
       setStep(step - 1);
