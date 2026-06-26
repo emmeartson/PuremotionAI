@@ -65,7 +65,15 @@ function Quiz() {
 
     return (
         <div className="h-auto min-h-0 bg-background">
-            <Header />
+            <header className="sticky top-0 z-50 border-b border-[#e6d8c4] bg-[#fff] py-4 flex justify-center">
+                <Link to="/">
+                    <img
+                        src="/logo.png"
+                        alt="PureMotion logo"
+                        className="h-7 sm:h-8 w-auto"
+                    />
+                </Link>
+            </header>
 
             <main className="mx-auto max-w-5xl px-5 pt-5 pb-8 sm:px-8 sm:pt-8 sm:pb-10">
                 {step === 1 && (

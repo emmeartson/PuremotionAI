@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Heart } from "lucide-react";
-import { BsFillStarFill } from "react-icons/bs";
-import { MdVerified } from "react-icons/md";
+import { Sparkles, Star, ShieldCheck, BadgeCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import elise from "../../../public/Elise D.jpg";
-import liam from "../../../public/Liam G..jpg";
+import { getVideoImageFiles } from "../../Redux/VideoUpload";
 
 const BASE_URL = "api.puremotion.co";
 
@@ -14,6 +11,32 @@ export const Step4_Loading = ({ onNext, isSubmitting }) => {
   );
   const wsRef = useRef(null);
   const navigate = useNavigate();
+  const [progress, setProgress] = useState(0);
+  const [previewSrc, setPreviewSrc] = useState("");
+
+  useEffect(() => {
+    try {
+      const { image_one } = getVideoImageFiles();
+      if (image_one) {
+        const url = URL.createObjectURL(image_one);
+        setPreviewSrc(url);
+        return () => URL.revokeObjectURL(url);
+      }
+    } catch (e) {
+      console.error("Error loading preview image:", e);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Fake progress up to 99% over 60 seconds
+    const TOTAL_MS = 60000;
+    const start = Date.now();
+    const id = setInterval(() => {
+      const p = Math.min(99, ((Date.now() - start) / TOTAL_MS) * 100);
+      setProgress(p);
+    }, 100);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     // Check if user has access_token
@@ -62,6 +85,7 @@ export const Step4_Loading = ({ onNext, isSubmitting }) => {
 
         // If video generation is complete
         if (status === "completed" || status === "playing") {
+          setProgress(100);
           setTimeout(() => {
             ws.close();
             navigate("/dashboard");
@@ -85,153 +109,59 @@ export const Step4_Loading = ({ onNext, isSubmitting }) => {
         ws.close();
       }
     };
-  }, [onNext]);
+  }, [onNext, navigate]);
+
   return (
-    <div className="w-full text-center animate-in fade-in zoom-in-95 duration-500">
-      {/* --- TESTIMONIALS --- */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-12">
-        {/* Card - Elise D. */}
-        <div
-          className="bg-[#f2ebe2] rounded-2xl p-3 sm:p-4 flex flex-col border border-[#e5e0d6]"
-          style={{ boxShadow: "0 2px 12px 0 rgba(60, 40, 10, 0.07)" }}
-        >
-          <div className="mb-2 sm:mb-3">
-            <img
-              src="/loved4.gif"
-              alt="after"
-              className="w-full h-36 sm:h-44 md:h-52 rounded-xl object-cover"
-            />
-          </div>
-          <div className="flex items-center mb-1">
-            {[...Array(5)].map((_, idx) => (
-              <BsFillStarFill
-                key={idx}
-                className="text-[#634910] text-xs sm:text-sm mr-0.5 sm:mr-1"
-              />
-            ))}
-          </div>
-          <p className="text-gray-800 text-[12px] sm:text-[13px] md:text-[14px] mb-2 sm:mb-3 flex-1 leading-relaxed text-left">
-            "I surprised my friend with this to bring their family photo to
-            life. We didn't expect such an emotional reaction."
-          </p>
-          <div className="border-t border-[#e5e0d6] pt-2 flex items-center gap-2 mt-auto">
-            <img
-              src={elise}
-              alt="Elise D."
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-white shadow flex-shrink-0"
-            />
-            <div className="text-left">
-              <span className="font-semibold text-gray-900 block leading-tight text-xs sm:text-sm">
-                Elise D.
-              </span>
-              <span className="text-[10px] sm:text-xs text-gray-500 block">
-                Paris, France
-              </span>
-              <span className="flex items-center text-[10px] sm:text-xs text-[#1da1f2] mt-0.5 font-medium">
-                <MdVerified className="mr-0.5 text-xs sm:text-sm" /> Verified
-                user
-              </span>
+    <section className="relative overflow-hidden w-full animate-in fade-in zoom-in-95 duration-500">
+      <div className="absolute inset-0 bg-warm-glow pointer-events-none" />
+      <div className="relative mx-auto max-w-2xl px-5 pt-5 pb-8 text-center sm:px-8 sm:pt-8 sm:pb-10">
+        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+          <Sparkles className="h-3.5 w-3.5 animate-pulse" /> Creating something special
+        </div>
+        <h1 className="font-serif text-3xl text-balance sm:text-5xl">
+          Bringing Your Memory <span className="italic text-gradient-gold">Back To Life…</span>
+        </h1>
+        <p className="mt-3 text-muted-foreground">Please don't close this window. This usually takes under a minute.</p>
+
+        {/* Photo ring with halo */}
+        <div className="relative mx-auto mt-4 h-32 w-32 sm:h-44 sm:w-44">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/40 to-primary/10 blur-2xl animate-pulse" />
+          <div className="relative h-full w-full rounded-full bg-gradient-gold p-1 animate-soft-zoom">
+            <div className="h-full w-full overflow-hidden rounded-full ring-4 ring-background">
+              <img src={previewSrc || "/grandfather.jpg"} alt="Uploaded memory" className="h-full w-full object-cover" />
             </div>
           </div>
+          <div className="pointer-events-none absolute -inset-2 rounded-full border-2 border-dashed border-primary/40 animate-spin" style={{ animationDuration: "12s" }} />
         </div>
 
-        {/* Card - Liam G. */}
-        <div
-          className="bg-[#f2ebe2] rounded-2xl p-3 sm:p-4 flex flex-col border border-[#e5e0d6]"
-          style={{ boxShadow: "0 2px 12px 0 rgba(60, 40, 10, 0.07)" }}
-        >
-          <div className="mb-2 sm:mb-3">
-            <img
-              src="/loved6.gif"
-              alt="after"
-              className="w-full h-36 sm:h-44 md:h-52 rounded-xl object-cover"
-            />
-          </div>
-          <div className="flex items-center mb-1">
-            {[...Array(5)].map((_, idx) => (
-              <BsFillStarFill
-                key={idx}
-                className="text-[#634910] text-xs sm:text-sm mr-0.5 sm:mr-1"
-              />
-            ))}
-          </div>
-          <p className="text-gray-800 text-[12px] sm:text-[13px] md:text-[14px] mb-2 sm:mb-3 flex-1 leading-relaxed text-left">
-            "The realism is unbelievable. PureMotion turned a simple photo into
-            something my family will treasure forever."
-          </p>
-          <div className="border-t border-[#e5e0d6] pt-2 flex items-center gap-2 mt-auto">
-            <img
-              src={liam}
-              alt="Liam G."
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-white shadow flex-shrink-0"
-            />
-            <div className="text-left">
-              <span className="font-semibold text-gray-900 block leading-tight text-xs sm:text-sm">
-                Liam G.
-              </span>
-              <span className="text-[10px] sm:text-xs text-gray-500 block">
-                Toronto, Canada
-              </span>
-              <span className="flex items-center text-[10px] sm:text-xs text-[#1da1f2] mt-0.5 font-medium">
-                <MdVerified className="mr-0.5 text-xs sm:text-sm" /> Verified
-                user
-              </span>
-            </div>
-          </div>
+        {/* Rotating stage message / Status message */}
+        <div className="mt-4">
+          <p className="fade-up text-base font-medium text-foreground sm:text-lg">{statusMessage}</p>
         </div>
-      </div>
 
-      {/* --- SPINNER --- */}
-      <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 mx-auto mb-4 sm:mb-6">
-        <svg
-          viewBox="0 0 100 100"
-          className="w-full h-full animate-spin"
-          style={{ animationDuration: "1.5s" }}
-        >
-          <circle
-            cx="50"
-            cy="50"
-            r="40"
-            stroke="#f3f4f6"
-            strokeWidth="8"
-            fill="transparent"
+        {/* Progress bar */}
+        <div className="mx-auto mt-4 h-2 w-full max-w-md overflow-hidden rounded-full bg-border/60">
+          <div
+            className="h-full rounded-full bg-gradient-gold transition-[width] duration-200"
+            style={{ width: `${progress}%` }}
           />
-          <circle
-            cx="50"
-            cy="50"
-            r="40"
-            stroke="#7c602e"
-            strokeWidth="8"
-            fill="transparent"
-            strokeDasharray="60 200"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">{Math.floor(progress)}% complete</p>
 
-      {/* --- SCROLLING STATUS TEXT --- */}
-      <div className="w-full overflow-hidden rounded-lg px-0">
-        <div className="animate-marquee whitespace-nowrap inline-block">
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="text-xs sm:text-sm font-semibold text-[#7c602e] mx-4 sm:mx-6"
-            >
-              {statusMessage}
-            </span>
-          ))}
+        {/* Trust strip */}
+        <div className="mx-auto mt-4 flex max-w-md flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[12px] text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="flex">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-3 w-3 fill-primary text-primary" />)}</span>
+            <span className="font-semibold text-foreground">4.8</span> rating
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <BadgeCheck className="h-3.5 w-3.5 text-success" /> 8,000+ happy customers
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <ShieldCheck className="h-3.5 w-3.5 text-success" /> Private & secure
+          </span>
         </div>
       </div>
-
-      <style>{`
-        @keyframes marquee {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-33.333%); }
-        }
-        .animate-marquee {
-          animation: marquee 10s linear infinite;
-        }
-      `}</style>
-    </div>
+    </section>
   );
 };

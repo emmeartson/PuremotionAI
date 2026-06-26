@@ -1,0 +1,376 @@
+import React, { useState, useEffect, useMemo } from "react";
+import { Check, Star, Lock, ShieldCheck, BadgeCheck, Sparkles, Clock } from "lucide-react";
+import { useSelector } from "react-redux";
+import PaymentModal from "../Stripe/PaymentModal";
+import Footer from "../../Shared/Footer";
+
+const plans = [
+    {
+        id: "weekly_update",
+        name: "Starter Package",
+        price: "$1.99",
+        oldPrice: null,
+        badge: null,
+        desc: "4 Memories every week",
+        unit: "per memory",
+        price_id: "price_1TYHxvF9gOu6UGqJWKdchdbY",
+        credits: 4,
+        period: "Week",
+    },
+    {
+        id: "fortnightly_update",
+        name: "Family Package",
+        price: "$0.99",
+        oldPrice: "$2.48",
+        badge: "SPECIAL OFFER 60% OFF",
+        desc: "15 Memories every 2 weeks",
+        unit: "per memory",
+        price_id: "price_1TYHzOF9gOu6UGqJ9A479qAG",
+        credits: 15,
+        period: "Fortnight",
+    },
+    {
+        id: "monthly_update",
+        name: "Premium Package",
+        price: "$0.69",
+        oldPrice: "$1.38",
+        badge: "BEST VALUE",
+        desc: "30 Memories every month",
+        unit: "per memory",
+        price_id: "price_1TYI0FF9gOu6UGqJpAN8lEvp",
+        credits: 30,
+        period: "Month",
+    },
+];
+
+export default function UpdatedPricingWholePage() {
+    const [selected, setSelected] = useState("fortnightly_update");
+    const [showPayment, setShowPayment] = useState(false);
+
+    // Dynamically load the user's uploaded image if available from Redux, otherwise fallback
+    const previewImage = useSelector((state) => state.videoUpload?.previewImage) || "/grandfather.jpg";
+
+    const selectedPlan = plans.find((p) => p.id === selected) || plans[1];
+    const priceAmount = selectedPlan ? parseFloat(selectedPlan.price.replace("$", "")) : 0;
+    const finalAmount = selectedPlan ? (priceAmount * selectedPlan.credits).toFixed(2) : "0.00";
+
+    const openCheckout = () => setShowPayment(true);
+    const scrollToPlans = () =>
+        document.getElementById("plans")?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    return (
+        <div className="min-h-screen bg-[#fbf8f3] pb-4 sm:pb-0">
+            {/* 1. Sticky urgency bar */}
+            <CountdownBar />
+
+            {/* 2. Header */}
+            <header className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/70 backdrop-blur-md">
+                <div className="mx-auto flex h-12 max-w-7xl items-center justify-center px-5 sm:h-14">
+                    <img src="/logo.png" alt="PureMotion" className="h-6 w-auto sm:h-7" />
+                </div>
+            </header>
+
+            {/* 3. Hero */}
+            <section className="relative overflow-hidden">
+                <div className="absolute inset-0 bg-warm-glow pointer-events-none" />
+                <div className="relative mx-auto max-w-2xl px-5 pt-6 pb-4 text-center sm:pt-10 sm:pb-6">
+                    <h1 className="mx-auto max-w-xl font-serif text-[1.75rem] leading-[1.1] text-balance sm:text-4xl text-gray-900">
+                        Your Memory Is Ready To{" "}
+                        <span className="italic text-[#8B6A2B]">Come Alive</span>
+                    </h1>
+                    <p className="mx-auto mt-3 max-w-md text-[14px] text-gray-500 sm:text-base">
+                        We've prepared your memory and will keep it reserved while you choose a package.
+                    </p>
+                    <div className="mt-4 flex justify-center">
+                        <button
+                            onClick={scrollToPlans}
+                            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-7 py-3 text-sm font-bold text-white shadow-[0_14px_30px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] active:scale-[0.99] sm:text-base"
+                        >
+                            <Sparkles className="h-4 w-4" /> Unlock Your Memory
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            {/* 4. User memory preview */}
+            <section className="mx-auto max-w-2xl px-5 pt-2 pb-6 sm:pt-4 sm:pb-8">
+                <div className="mx-auto max-w-sm">
+                    <div className="relative overflow-hidden rounded-[24px] border border-[#E8D9B8] bg-[#2B2118] shadow-[0_24px_50px_-24px_rgba(43,33,24,0.55)]">
+                        <div className="relative aspect-[4/5]">
+                            <img
+                                src={previewImage}
+                                alt="Your memory preview"
+                                className="absolute inset-0 h-full w-full object-cover blur-[3px] brightness-90"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+                                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/40 backdrop-blur-md">
+                                    <Lock className="h-6 w-6" />
+                                </span>
+                                <p className="mt-3 text-center text-[12px] font-semibold uppercase tracking-[0.18em] text-white/90 whitespace-pre-line">
+                                    UPLOAD COMPLETE{"\n"}YOUR MEMORY IS READY
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 4b. Social proof */}
+            <section className="mx-auto max-w-2xl px-5 pt-2 pb-4">
+                <div className="mx-auto max-w-md text-center">
+                    <h2 className="font-serif text-lg font-semibold text-[#2B2118] sm:text-xl">
+                        Trusted by thousands of happy customers
+                    </h2>
+                    <div className="mt-3 flex items-center justify-center gap-3">
+                        <div className="flex -space-x-2">
+                            {["/Elise D.jpg", "/Hannah P..jpg", "/Jonas K..jpg", "/Marco D..jpg"].map((src, i) => (
+                                <img
+                                    key={i}
+                                    src={src}
+                                    alt=""
+                                    loading="lazy"
+                                    className="h-8 w-8 rounded-full border-2 border-white object-cover ring-1 ring-[#E8D9B8]"
+                                />
+                            ))}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="flex">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                    <Star key={i} className="h-3.5 w-3.5 fill-[#C9A227] text-[#C9A227]" />
+                                ))}
+                            </div>
+                            <p className="text-[12px] text-gray-500">
+                                4.8/5 · Excellent
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 5. Pricing plans */}
+            <section id="plans" className="mx-auto max-w-2xl scroll-mt-20 px-5 pt-2 pb-6 sm:pt-4">
+                <div className="flex flex-col gap-4">
+                    {plans.map((p) => {
+                        const isSelected = selected === p.id;
+                        const isFamily = p.id === "fortnightly_update";
+                        return (
+                            <div key={p.id} className={`relative ${isFamily ? "mt-1" : ""}`}>
+                                {p.badge && (
+                                    <span
+                                        className={`absolute -top-2.5 right-5 z-10 whitespace-nowrap rounded-full font-semibold shadow-sm ${isFamily
+                                            ? "bg-[#F2C94C] text-[#2B2118] px-3.5 py-1 text-[11px]"
+                                            : "border border-green-200 bg-green-100 text-green-700 px-3 py-0.5 text-[10px]"
+                                            }`}
+                                    >
+                                        {p.badge}
+                                    </span>
+                                )}
+                                <button
+                                    type="button"
+                                    onClick={() => setSelected(p.id)}
+                                    className={`flex w-full items-center justify-between gap-4 rounded-2xl border-2 text-left transition-all px-4 py-4 sm:px-6 sm:py-5 ${isSelected
+                                        ? "border-[#8B6A2B] bg-[#FBF6EA] shadow-[0_18px_45px_-22px_rgba(139,106,43,0.45)]"
+                                        : isFamily
+                                            ? "border-[#8B6A2B]/70 bg-[#FBF6EA]/60 shadow-[0_18px_45px_-22px_rgba(139,106,43,0.4)] hover:border-[#8B6A2B]"
+                                            : "border-gray-200 bg-white shadow-sm hover:border-[#8B6A2B]/40"
+                                        }`}
+                                >
+                                    {/* Left: name + description */}
+                                    <div className="flex min-w-0 items-start gap-3">
+                                        <span
+                                            className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${isSelected
+                                                ? "border-[#8B6A2B] bg-[#8B6A2B] text-white"
+                                                : "border-gray-300 bg-white"
+                                                }`}
+                                            aria-hidden
+                                        >
+                                            {isSelected && <Check className="h-3 w-3" strokeWidth={3} />}
+                                        </span>
+                                        <div className="min-w-0">
+                                            <h3 className="font-serif text-lg sm:text-xl text-gray-900">
+                                                {p.name}
+                                            </h3>
+                                            <p className="mt-0.5 text-[11px] text-[#8B6A2B] sm:text-[12px]">
+                                                {p.desc}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Right: price hierarchy */}
+                                    <div className="shrink-0 text-right">
+                                        <div className="flex items-center gap-1.5 justify-end font-serif text-2xl leading-none text-gray-900 sm:text-3xl">
+                                            {p.oldPrice && (
+                                                <span className="text-[15px] text-gray-400 line-through sm:text-base">
+                                                    {p.oldPrice}
+                                                </span>
+                                            )}
+                                            <span>{p.price}</span>
+                                        </div>
+                                        <p className="mt-1 text-xs font-medium text-[#8B6A2B]">
+                                            {p.unit}
+                                        </p>
+                                    </div>
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* Primary CTA */}
+                <button
+                    onClick={openCheckout}
+                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-6 py-4 text-base font-bold text-white shadow-[0_18px_40px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] sm:text-lg"
+                >
+                    Unlock Your Memory
+                </button>
+
+                <p className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12px] text-gray-500">
+                    <Check className="h-3 w-3 text-green-500" strokeWidth={3} /> Secure checkout <span>·</span> Cancel anytime <span>·</span> 30-day guarantee
+                </p>
+            </section>
+
+            {/* 6. Trust / payment row */}
+            <section className="mx-auto max-w-2xl px-5 pt-5">
+                <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                        {(["visa", "mastercard", "amex", "applepay", "googlepay"]).map((n) => (
+                            <PaymentIcon key={n} name={n} />
+                        ))}
+                    </div>
+                    <p className="inline-flex items-center gap-1.5 text-[11px] text-gray-500">
+                        <Lock className="h-3 w-3" /> Payments securely processed by Stripe
+                    </p>
+                </div>
+            </section>
+
+            {/* 8. Testimonials */}
+            <section className="mx-auto max-w-4xl px-5 py-10 sm:py-14">
+                <h2 className="text-center font-serif text-2xl sm:text-3xl text-gray-900">Loved by families everywhere</h2>
+                <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                    {[
+                        { name: "Jennifer", quote: "I cried instantly seeing him move again." },
+                        { name: "Michael", quote: "We literally gasped when the photo came alive." },
+                        { name: "Jessica", quote: "It felt like a moment I never thought I'd get back." },
+                    ].map((t) => (
+                        <article key={t.name} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div className="flex">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                    <Star key={i} className="h-3.5 w-3.5 fill-[#C9A227] text-[#C9A227]" />
+                                ))}
+                            </div>
+                            <p className="mt-2 text-[13px] leading-relaxed text-gray-900">"{t.quote}"</p>
+                            <p className="mt-3 inline-flex items-center gap-1 text-[11px] text-gray-500">
+                                <span className="font-semibold text-gray-900">{t.name}</span>
+                                <span>·</span>
+                                <BadgeCheck className="h-3 w-3 text-green-500" />
+                                <span>Verified Customer</span>
+                            </p>
+                        </article>
+                    ))}
+                </div>
+            </section>
+
+            {/* 9. Final CTA */}
+            <section className="mx-auto max-w-2xl px-5 pb-4 text-center">
+                <h2 className="font-serif text-3xl sm:text-4xl text-gray-900">Don't leave this memory behind</h2>
+                <p className="mx-auto mt-3 max-w-md text-[13px] text-gray-500 sm:text-sm">
+                    Your memory is ready and waiting. Unlock the full animation before your reserved offer expires.
+                </p>
+                {/* <button
+                    onClick={openCheckout}
+                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-6 py-4 text-base font-bold text-white shadow-[0_18px_40px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] sm:w-auto sm:px-10 sm:text-lg"
+                >
+                    Unlock Your Memory
+                </button> */}
+                <p className="mt-3 inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12px] text-gray-500">
+                    <ShieldCheck className="h-3.5 w-3.5 text-green-500" /> Secure checkout
+                    <span>·</span> Cancel anytime <span>·</span> 30-day guarantee
+                </p>
+            </section>
+
+            <PaymentModal
+                isOpen={showPayment}
+                onClose={() => setShowPayment(false)}
+                priceId={selectedPlan.price_id}
+                planName={selectedPlan.name}
+                amount={`$${finalAmount}/${selectedPlan.period.toLowerCase()}`}
+                checkoutType="subscription"
+            />
+            <Footer />
+        </div>
+    );
+}
+
+function useCountdown(durationSec = 30 * 60) {
+    const [remaining, setRemaining] = useState(durationSec);
+    useEffect(() => {
+        const DURATION = durationSec * 1000;
+        const DAY = 24 * 60 * 60 * 1000;
+        let start;
+        try {
+            const raw = localStorage.getItem("pm_timer_start");
+            const parsed = raw ? parseInt(raw, 10) : 0;
+            if (!parsed || Date.now() - parsed > DAY) {
+                start = Date.now();
+                localStorage.setItem("pm_timer_start", String(start));
+            } else {
+                start = parsed;
+            }
+        } catch {
+            start = Date.now();
+        }
+        const tick = () => {
+            const left = Math.max(0, Math.floor((start + DURATION - Date.now()) / 1000));
+            setRemaining(left);
+        };
+        tick();
+        const id = setInterval(tick, 1000);
+        return () => clearInterval(id);
+    }, [durationSec]);
+    return remaining;
+}
+
+function CountdownBar() {
+    const remaining = useCountdown();
+    const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
+    const ss = String(remaining % 60).padStart(2, "0");
+    return (
+        <div className="bg-[#2B2118] text-white">
+            <div className="mx-auto flex max-w-5xl items-center justify-center gap-2 px-5 py-1.5 text-center text-[12px] sm:text-[13px]">
+                <span className="font-medium">❤️ We'll keep your memory ready for</span>
+                <span className="font-mono font-bold tracking-wider text-[#F2C94C]">{mm}:{ss}</span>
+            </div>
+        </div>
+    );
+}
+
+function PromoTimer() {
+    const remaining = useCountdown();
+    const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
+    const ss = String(remaining % 60).padStart(2, "0");
+    return (
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#8B6A2B] px-2.5 py-1 text-[11px] font-bold text-white">
+            <Clock className="h-3 w-3" /> {mm}:{ss}
+        </span>
+    );
+}
+
+function PaymentIcon({ name }) {
+    const images = {
+        visa: "/visa.png",
+        mastercard: "/master.png",
+        amex: "/amex.png",
+        applepay: "/applepay.png",
+        googlepay: "/googlepay.webp"
+    };
+
+    const src = images[name];
+    if (!src) return null;
+
+    return (
+        <div className="inline-flex h-9 w-[58px] items-center justify-center rounded-md border border-gray-200 bg-white shadow-sm overflow-hidden p-1">
+            <img src={src} alt={name} className="h-full w-full object-contain" />
+        </div>
+    );
+}

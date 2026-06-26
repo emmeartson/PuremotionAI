@@ -7,7 +7,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 const FlashbackOnboarding = lazy(() => import("../Pages/FlashbackAI/FlashbackOnboarding"));
 const Step5_Login = lazy(() => import("../Pages/FlashbackAI/Step5_Login").then(m => ({ default: m.Step5_Login })));
 const Step_PreviewReady = lazy(() => import("../Pages/FlashbackAI/Step_PreviewReady").then(m => ({ default: m.Step_PreviewReady })));
-const PricingPage = lazy(() => import("../Pages/Pricing/PricingPage"));
+const PricingPage = lazy(() => import("../Pages/Pricing/UpdatedPricingWholePage"));
 const LoginPage = lazy(() => import("../Pages/Authentication/SignIn"));
 const GetCreditPage = lazy(() => import("../Pages/Dashboard/GetCreditPage").then(m => ({ default: m.GetCreditPage })));
 const DashboardLayout = lazy(() => import("../Pages/Dashboard/DashboardLayout").then(m => ({ default: m.DashboardLayout })));

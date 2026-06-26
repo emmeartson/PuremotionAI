@@ -201,25 +201,25 @@ function PaymentModal({
 
             {/* Center Content */}
             <div className="flex flex-col items-center text-center">
-              <img src={logo} alt="Logo" className="h-8 mb-2" />
+              {/* <img src={logo} alt="Logo" className="h-8 mb-2" /> */}
 
               <h2
                 id="payment-modal-title"
                 className="text-[28px] sm:text-[34px] text-gray-900 font-serif leading-[1.2]"
               >
-                Your Memory Is Ready
-                <br />
-                To <span className="text-[#967431] italic">Come Alive</span>
+                Your Memory Is <span className="text-[#967431] italic">Ready</span>
+                {/* <br /> */}
+                {/* To <span className="text-[#967431] italic">Come Alive</span> */}
               </h2>
 
               <p className="text-[15px] text-gray-500 mt-4 px-4 max-w-sm">
-                Complete your secure checkout to unlock your restored memory.
+                Complete your order to unlock your memory.
               </p>
 
               <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-2 mt-5 text-[13px] text-gray-500">
                 <span className="flex items-center gap-1.5"><span className="text-gray-400">✓</span> Secure checkout</span>
                 <span className="flex items-center gap-1.5"><span className="text-gray-400">✓</span> Cancel anytime</span>
-                <span className="flex items-center gap-1.5"><span className="text-gray-400">✓</span> Private & encrypted</span>
+                <span className="flex items-center gap-1.5"><span className="text-gray-400">✓</span> 30 Days Guarantee</span>
               </div>
             </div>
           </div>

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button } from "./Button";
 import AnnouncementBar from "../../Shared/AnnouncementBar";
 import { useNavigate, Link } from "react-router-dom";
-import { FaCheck, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Check, Mail, Lock } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerOrLogin } from "../../Redux/OnlyemailCreateacc";
 import { authService } from "../../Redux/Auth";
@@ -341,9 +342,7 @@ export const Step_onlyemail = ({ onNext }) => {
       default:
         return (
           <>
-            Enter your email to start creating
-            <br />
-            and viewing your memories.
+            Save your memory before it's <span className="italic text-[#8B6A2B]">gone</span>
           </>
         );
     }
@@ -361,349 +360,362 @@ export const Step_onlyemail = ({ onNext }) => {
       case "resetPassword":
         return "Enter your new password below.";
       default:
-        return (
-          <>
-            <FaCheck className="inline mr-1 text-green-500" /> Make sure it's
-            correct, so your moment reaches safely!
-          </>
-        );
+        return "Enter your email to securely save your memory and access it anytime.";
     }
   };
 
   return (
-    <section>
+    <section className="relative overflow-hidden h-auto min-h-screen bg-[#fbf8f3]">
       <AnnouncementBar />
-      <div className="w-full mx-auto text-center animate-in fade-in zoom-in-95 duration-500 px-4 sm:px-0 pb-10">
+      <div className="absolute inset-0 bg-warm-glow pointer-events-none" />
+
+      <div className="relative w-full mx-auto text-center animate-in fade-in zoom-in-95 duration-500 px-4 sm:px-0 pb-10">
         <Link to="/">
-          <header className="px-4 sm:px-6 md:px-12 py-4 sm:py-6 flex items-center justify-center mb-8 sm:mb-10 border-b border-gray-100 bg-white/70 backdrop-blur-md sticky top-0 z-50">
+          <header className="px-4 sm:px-6 md:px-12 py-4 sm:py-6 flex items-center justify-center mb-4 sm:mb-6 border-b border-gray-200 bg-white/70 backdrop-blur-md sticky top-0 z-50">
             <div className="text-xl md:text-2xl font-serif tracking-tight text-[#7c602e] font-bold">
               PureMotion
             </div>
           </header>
         </Link>
 
-        {/* Success Message */}
-        {successMessage && (
-          <div className="max-w-sm mx-auto mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
-            {successMessage}
-          </div>
-        )}
-
-        {/* Heading */}
-        <h1 className="text-2xl sm:text-3xl md:text-5xl font-serif text-gray-900 mb-4 leading-tight font-medium mx-auto">
-          {getHeading()}
-        </h1>
-
-        {/* Subheading */}
-        <p className="text-gray-400 text-xs sm:text-sm mb-8 sm:mb-10 font-medium tracking-tight">
-          {getSubheading()}
-        </p>
-
-        {/* Auth Forms */}
-        <div className="max-w-sm mx-auto space-y-4">
-
-          {/* Email-only Signup Form */}
+        <div className="mx-auto max-w-md px-5 pt-2 pb-8 text-center sm:pt-4 sm:pb-10">
           {activeView === "signup" && (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="email"
-                placeholder="Email *"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#7c602e]/20 outline-none transition-all placeholder:text-gray-300"
-                autoComplete="email"
-                required
-              />
-              {error && (
-                <p className="text-red-500 text-sm mt-1">
-                  {error.message || "An error occurred. Please try again."}
+            <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#7c602e]/10 text-[#7c602e]">
+              <Mail className="h-5 w-5" />
+            </div>
+          )}
+
+          {/* Success Message */}
+          {successMessage && (
+            <div className="max-w-sm mx-auto mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+              {successMessage}
+            </div>
+          )}
+
+          {/* Heading */}
+          <h1 className="font-serif text-3xl text-balance sm:text-4xl text-gray-900 mb-2">
+            {getHeading()}
+          </h1>
+
+          {/* Subheading */}
+          <p className="mx-auto mt-2 max-w-sm text-[14px] text-gray-500 mb-6">
+            {getSubheading()}
+          </p>
+
+          {/* Auth Forms */}
+          <div className="w-full text-left">
+            {/* Email-only Signup Form */}
+            {activeView === "signup" && (
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  autoFocus
+                  inputMode="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  className="h-14 w-full rounded-2xl border border-gray-200 bg-white px-5 text-base shadow-sm outline-none transition-all focus:border-[#8B6A2B] focus:ring-2 focus:ring-[#8B6A2B]/20 placeholder:text-gray-400"
+                />
+                {error && (
+                  <p className="text-red-500 text-sm">
+                    {error.message || "An error occurred. Please try again."}
+                  </p>
+                )}
+                
+                <p className="mt-1 flex items-center justify-center gap-1.5 text-xs text-gray-500">
+                  <Lock className="h-3 w-3" /> We never share your email with anyone.
                 </p>
-              )}
-              <Button
-                className="w-full py-3.5 rounded-xl text-white font-semibold text-base shadow-sm"
-                type="submit"
-                disabled={emailLoading || googleLoading}
-              >
-                {emailLoading ? "Loading..." : "Continue"}
-              </Button>
 
-              {/* Divider */}
-              <div className="relative my-2">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-gray-200"></span>
-                </div>
-                <div className="relative flex justify-center text-xs uppercase tracking-wider font-semibold text-gray-400">
-                  <span className="bg-white px-3">Or</span>
-                </div>
-              </div>
+                <button
+                  type="submit"
+                  disabled={emailLoading || googleLoading}
+                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-6 text-base font-semibold text-white shadow-[0_18px_40px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] disabled:opacity-60"
+                  style={{ minHeight: 56 }}
+                >
+                  {emailLoading ? "Saving..." : "Save My Memory \u2192"}
+                </button>
 
-              {/* Continue with Google */}
-              {/* <button
-                type="button"
-                onClick={handleGoogleAuth}
-                disabled={emailLoading || googleLoading}
-                className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 py-3 rounded-xl font-semibold transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
-              >
-                {googleLoading ? (
-                  <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <img
-                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                    alt="Google"
-                    className="w-5 h-5"
-                  />
+                {/* Divider */}
+                <div className="relative my-3">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-gray-200"></span>
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase tracking-wider font-semibold text-gray-400">
+                    <span className="bg-[#fbf8f3] px-3">Or</span>
+                  </div>
+                </div>
+
+                {googleError && (
+                  <p className="text-red-500 text-sm mt-1 text-center">{googleError}</p>
                 )}
-                {googleLoading ? "Connecting..." : "Continue with Google"}
-              </button> */}
 
-              {googleError && (
-                <p className="text-red-500 text-sm mt-1">{googleError}</p>
-              )}
-
-              <div className="text-sm text-gray-600">
-                Already have an account?{" "}
-                <span
-                  onClick={() => setActiveView("login")}
-                  className="text-[#7c602e] font-semibold cursor-pointer hover:underline"
-                >
-                  Login
-                </span>
-              </div>
-            </form>
-          )}
-
-          {/* Login Form */}
-          {activeView === "login" && (
-            <form onSubmit={handleLogin} className="space-y-4">
-              {loginError && (
-                <div className="text-red-500 text-sm font-medium mb-2">
-                  {loginError}
+                <div className="text-sm text-gray-600 text-center mt-2">
+                  Already have an account?{" "}
+                  <span
+                    onClick={() => setActiveView("login")}
+                    className="text-[#7c602e] font-semibold cursor-pointer hover:underline"
+                  >
+                    Login
+                  </span>
                 </div>
-              )}
-              <input
-                type="email"
-                placeholder="Email"
-                value={loginEmail}
-                onChange={(e) => setLoginEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#7c602e]/20 outline-none transition-all placeholder:text-gray-300"
-                autoComplete="email"
-                required
-              />
-              <div className="relative">
-                <input
-                  type={showLoginPassword ? "text" : "password"}
-                  placeholder="Password"
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#7c602e]/20 outline-none transition-all placeholder:text-gray-300"
-                  autoComplete="current-password"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  {showLoginPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-              <div className="text-right">
-                <span
-                  onClick={() => setActiveView("forgotPassword")}
-                  className="text-sm text-[#7c602e] font-semibold cursor-pointer hover:underline"
-                >
-                  Forgot Password?
-                </span>
-              </div>
-              <Button
-                className="w-full py-3.5 rounded-xl text-white font-semibold text-base shadow-sm"
-                type="submit"
-                disabled={loading || googleLoading}
-              >
-                {loading ? "Logging in..." : "Login"}
-              </Button>
 
-              {/* Divider */}
-              <div className="relative my-2">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-gray-200"></span>
-                </div>
-                <div className="relative flex justify-center text-xs uppercase tracking-wider font-semibold text-gray-400">
-                  <span className="bg-white px-3">Or</span>
-                </div>
-              </div>
+                <ul className="mx-auto mt-6 w-fit space-y-1.5 text-left text-sm text-gray-900">
+                  {[
+                    "Access your memory anytime",
+                    "Never lose your generated video",
+                    "Secure & private storage",
+                  ].map((b) => (
+                    <li key={b} className="flex items-start gap-2">
+                      <span className="mt-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600">
+                        <Check className="h-2.5 w-2.5" />
+                      </span>
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+              </form>
+            )}
 
-              {/* Continue with Google */}
-              <button
-                type="button"
-                onClick={handleGoogleAuth}
-                disabled={loading || googleLoading}
-                className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 py-3 rounded-xl font-semibold transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
-              >
-                {googleLoading ? (
-                  <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <img
-                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                    alt="Google"
-                    className="w-5 h-5"
-                  />
+            {/* Login Form */}
+            {activeView === "login" && (
+              <form onSubmit={handleLogin} className="flex flex-col gap-3">
+                {loginError && (
+                  <div className="text-red-500 text-sm font-medium mb-2 text-center">
+                    {loginError}
+                  </div>
                 )}
-                {googleLoading ? "Connecting..." : "Continue with Google"}
-              </button>
-
-              <div className="text-sm text-gray-600">
-                Don't have an account?{" "}
-                <span
-                  onClick={() => setActiveView("signup")}
-                  className="text-[#7c602e] font-semibold cursor-pointer hover:underline"
-                >
-                  Create Account
-                </span>
-              </div>
-            </form>
-          )}
-
-          {/* Forgot Password Form */}
-          {activeView === "forgotPassword" && (
-            <form onSubmit={handleForgotPassword} className="space-y-4">
-              {forgotError && (
-                <div className="text-red-500 text-sm font-medium mb-2">
-                  {forgotError}
-                </div>
-              )}
-              <input
-                type="email"
-                placeholder="Email"
-                value={forgotEmail}
-                onChange={(e) => setForgotEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#7c602e]/20 outline-none transition-all placeholder:text-gray-300"
-                autoComplete="email"
-                required
-              />
-              <Button
-                className="w-full py-3.5 rounded-xl text-white font-semibold text-base shadow-sm"
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? "Sending..." : "Send Reset OTP"}
-              </Button>
-              <div className="text-sm text-gray-600">
-                Remember your password?{" "}
-                <span
-                  onClick={() => setActiveView("login")}
-                  className="text-[#7c602e] font-semibold cursor-pointer hover:underline"
-                >
-                  Login
-                </span>
-              </div>
-            </form>
-          )}
-
-          {/* Forgot Password OTP Verification */}
-          {activeView === "forgotOtp" && (
-            <form onSubmit={handleVerifyForgotOTP} className="space-y-4">
-              {otpError && (
-                <div className="text-red-500 text-sm font-medium mb-2">
-                  {otpError}
-                </div>
-              )}
-              <p className="text-sm text-gray-600 mb-4">
-                We sent a reset code to <strong>{otpEmail}</strong>
-              </p>
-              <input
-                type="text"
-                placeholder="Enter OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#7c602e]/20 outline-none transition-all placeholder:text-gray-300 text-center text-xl tracking-widest"
-                maxLength="6"
-                required
-              />
-              <Button
-                className="w-full py-3.5 rounded-xl text-white font-semibold text-base shadow-sm"
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? "Verifying..." : "Verify OTP"}
-              </Button>
-              <div className="text-sm text-gray-600">
-                Didn't receive the code?{" "}
-                <span
-                  onClick={handleResendOTP}
-                  className="text-[#7c602e] font-semibold cursor-pointer hover:underline"
-                >
-                  Resend OTP
-                </span>
-              </div>
-            </form>
-          )}
-
-          {/* Reset Password Form */}
-          {activeView === "resetPassword" && (
-            <form onSubmit={handleResetPassword} className="space-y-4">
-              {resetError && (
-                <div className="text-red-500 text-sm font-medium mb-2">
-                  {resetError}
-                </div>
-              )}
-              <div className="relative">
                 <input
-                  type={showNewPassword ? "text" : "password"}
-                  placeholder="New Password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#7c602e]/20 outline-none transition-all placeholder:text-gray-300"
-                  autoComplete="new-password"
+                  type="email"
+                  placeholder="Email"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  className="h-14 w-full rounded-2xl border border-gray-200 bg-white px-5 text-base shadow-sm outline-none transition-all focus:border-[#8B6A2B] focus:ring-2 focus:ring-[#8B6A2B]/20 placeholder:text-gray-400"
+                  autoComplete="email"
+                  required
+                />
+                <div className="relative">
+                  <input
+                    type={showLoginPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    className="h-14 w-full rounded-2xl border border-gray-200 bg-white px-5 text-base shadow-sm outline-none transition-all focus:border-[#8B6A2B] focus:ring-2 focus:ring-[#8B6A2B]/20 placeholder:text-gray-400"
+                    autoComplete="current-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowLoginPassword(!showLoginPassword)}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showLoginPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                <div className="text-right mt-1">
+                  <span
+                    onClick={() => setActiveView("forgotPassword")}
+                    className="text-sm text-[#7c602e] font-semibold cursor-pointer hover:underline"
+                  >
+                    Forgot Password?
+                  </span>
+                </div>
+                
+                <button
+                  type="submit"
+                  disabled={loading || googleLoading}
+                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-6 text-base font-semibold text-white shadow-[0_18px_40px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] disabled:opacity-60"
+                  style={{ minHeight: 56 }}
+                >
+                  {loading ? "Logging in..." : "Login"}
+                </button>
+
+                {/* Divider */}
+                <div className="relative my-3">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-gray-200"></span>
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase tracking-wider font-semibold text-gray-400">
+                    <span className="bg-[#fbf8f3] px-3">Or</span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleGoogleAuth}
+                  disabled={loading || googleLoading}
+                  className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 h-14 rounded-2xl font-semibold transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+                >
+                  {googleLoading ? (
+                    <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <img
+                      src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                      alt="Google"
+                      className="w-5 h-5"
+                    />
+                  )}
+                  {googleLoading ? "Connecting..." : "Continue with Google"}
+                </button>
+
+                <div className="text-sm text-gray-600 text-center mt-4">
+                  Don't have an account?{" "}
+                  <span
+                    onClick={() => setActiveView("signup")}
+                    className="text-[#7c602e] font-semibold cursor-pointer hover:underline"
+                  >
+                    Create Account
+                  </span>
+                </div>
+              </form>
+            )}
+
+            {/* Forgot Password Form */}
+            {activeView === "forgotPassword" && (
+              <form onSubmit={handleForgotPassword} className="flex flex-col gap-3">
+                {forgotError && (
+                  <div className="text-red-500 text-sm font-medium mb-2 text-center">
+                    {forgotError}
+                  </div>
+                )}
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  className="h-14 w-full rounded-2xl border border-gray-200 bg-white px-5 text-base shadow-sm outline-none transition-all focus:border-[#8B6A2B] focus:ring-2 focus:ring-[#8B6A2B]/20 placeholder:text-gray-400"
+                  autoComplete="email"
                   required
                 />
                 <button
-                  type="button"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  type="submit"
+                  disabled={loading}
+                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-6 text-base font-semibold text-white shadow-[0_18px_40px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] disabled:opacity-60"
+                  style={{ minHeight: 56 }}
                 >
-                  {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                  {loading ? "Sending..." : "Send Reset OTP"}
                 </button>
-              </div>
-              <div className="relative">
+                <div className="text-sm text-gray-600 text-center mt-4">
+                  Remember your password?{" "}
+                  <span
+                    onClick={() => setActiveView("login")}
+                    className="text-[#7c602e] font-semibold cursor-pointer hover:underline"
+                  >
+                    Login
+                  </span>
+                </div>
+              </form>
+            )}
+
+            {/* Forgot Password OTP Verification */}
+            {activeView === "forgotOtp" && (
+              <form onSubmit={handleVerifyForgotOTP} className="flex flex-col gap-3">
+                {otpError && (
+                  <div className="text-red-500 text-sm font-medium mb-2 text-center">
+                    {otpError}
+                  </div>
+                )}
+                <p className="text-sm text-gray-600 mb-2 text-center">
+                  We sent a reset code to <br/><strong>{otpEmail}</strong>
+                </p>
                 <input
-                  type={showConfirmNewPassword ? "text" : "password"}
-                  placeholder="Confirm New Password"
-                  value={confirmNewPassword}
-                  onChange={(e) => setConfirmNewPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#7c602e]/20 outline-none transition-all placeholder:text-gray-300"
-                  autoComplete="new-password"
+                  type="text"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="h-14 w-full rounded-2xl border border-gray-200 bg-white px-5 text-xl tracking-widest text-center shadow-sm outline-none transition-all focus:border-[#8B6A2B] focus:ring-2 focus:ring-[#8B6A2B]/20 placeholder:text-gray-300"
+                  maxLength="6"
                   required
                 />
                 <button
-                  type="button"
-                  onClick={() =>
-                    setShowConfirmNewPassword(!showConfirmNewPassword)
-                  }
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  type="submit"
+                  disabled={loading}
+                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-6 text-base font-semibold text-white shadow-[0_18px_40px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] disabled:opacity-60"
+                  style={{ minHeight: 56 }}
                 >
-                  {showConfirmNewPassword ? <FaEyeSlash /> : <FaEye />}
+                  {loading ? "Verifying..." : "Verify OTP"}
                 </button>
-              </div>
-              <Button
-                className="w-full py-3.5 rounded-xl text-white font-semibold text-base shadow-sm"
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? "Resetting..." : "Reset Password"}
-              </Button>
-            </form>
-          )}
+                <div className="text-sm text-gray-600 text-center mt-4">
+                  Didn't receive the code?{" "}
+                  <span
+                    onClick={handleResendOTP}
+                    className="text-[#7c602e] font-semibold cursor-pointer hover:underline"
+                  >
+                    Resend OTP
+                  </span>
+                </div>
+              </form>
+            )}
+
+            {/* Reset Password Form */}
+            {activeView === "resetPassword" && (
+              <form onSubmit={handleResetPassword} className="flex flex-col gap-3">
+                {resetError && (
+                  <div className="text-red-500 text-sm font-medium mb-2 text-center">
+                    {resetError}
+                  </div>
+                )}
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    placeholder="New Password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="h-14 w-full rounded-2xl border border-gray-200 bg-white px-5 text-base shadow-sm outline-none transition-all focus:border-[#8B6A2B] focus:ring-2 focus:ring-[#8B6A2B]/20 placeholder:text-gray-400"
+                    autoComplete="new-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showConfirmNewPassword ? "text" : "password"}
+                    placeholder="Confirm New Password"
+                    value={confirmNewPassword}
+                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    className="h-14 w-full rounded-2xl border border-gray-200 bg-white px-5 text-base shadow-sm outline-none transition-all focus:border-[#8B6A2B] focus:ring-2 focus:ring-[#8B6A2B]/20 placeholder:text-gray-400"
+                    autoComplete="new-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShowConfirmNewPassword(!showConfirmNewPassword)
+                    }
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showConfirmNewPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-6 text-base font-semibold text-white shadow-[0_18px_40px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] disabled:opacity-60"
+                  style={{ minHeight: 56 }}
+                >
+                  {loading ? "Resetting..." : "Reset Password"}
+                </button>
+              </form>
+            )}
+          </div>
+
+          <p className="text-xs sm:text-[12px] text-gray-400 leading-relaxed font-medium mt-8">
+            We respect your privacy. We will never sell, rent or share your email
+            address. That's more than a{" "}
+            <Link to="/privacy-policy" className="text-blue-600 underline">
+              policy
+            </Link>
+            , it's our personal guarantee.
+          </p>
         </div>
-
-        <p className="text-xs sm:text-[14px] text-gray-400 leading-relaxed font-medium mt-6">
-          We respect your privacy. We will never sell, rent or share your email
-          address. That's more than a{" "}
-          <Link to="/privacy-policy" className="text-blue-600 underline">
-            policy
-          </Link>
-          , it's our personal guarantee.
-        </p>
       </div>
     </section>
   );

@@ -195,7 +195,7 @@ export default function DashboardFlashbackFlow() {
             />
           )}
           {step === 4 && (
-            <Test onNext={handleLoadingComplete} isSubmitting={isSubmitting} />
+            <Step4_Loading onNext={handleLoadingComplete} isSubmitting={isSubmitting} />
           )}
         </div>
       </main>
