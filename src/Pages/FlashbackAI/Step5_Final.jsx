@@ -7,7 +7,7 @@ export const Step5_Final = ({ onNext, previewImage }) => {
   return (
     <section className="relative overflow-hidden animate-in fade-in zoom-in-95 duration-500">
       <div className="absolute inset-0 bg-warm-glow pointer-events-none" />
-      <div className="relative mx-auto max-w-3xl px-5 pt-5 pb-8 text-center sm:px-8 sm:pt-8 sm:pb-10">
+      <div className="relative mx-auto max-w-3xl px-5 pt-1 pb-8 text-center sm:px-8 sm:pt-2 sm:pb-10">
         <h1 className="font-serif text-4xl text-balance sm:text-6xl text-gray-900 fade-up">
           Your Memory Is <span className="text-[#8B6A2B] italic">Ready</span>
         </h1>

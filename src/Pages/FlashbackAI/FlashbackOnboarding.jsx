@@ -179,7 +179,7 @@ export default function FlashbackOnboarding() {
 
   return (
     <div className="min-h-screen bg-[#fdfcfb] font-sans selection:bg-[#7c602e]/20">
-      <AnnouncementBar />
+      {/* <AnnouncementBar /> */}
       {/* Navigation Header */}
       <header className="px-4 sm:px-6 md:px-12 py-4 sm:py-5 md:py-6 flex items-center justify-between gap-3 border-b border-gray-100 bg-white/70 backdrop-blur-md sticky top-0 z-50">
         <button
@@ -195,15 +195,15 @@ export default function FlashbackOnboarding() {
           </div>
         </Link>
 
-        <div className="text-gray-400 text-xs sm:text-sm font-bold tabular-nums">
+        {/* <div className="text-gray-400 text-xs sm:text-sm font-bold tabular-nums">
           {Math.min(step, 4)} of 4
-        </div>
+        </div> */}
       </header>
 
       {/* Main Container */}
       <main className="pt-8 sm:pt-10 md:pt-12 pb-20 sm:pb-24 px-4 sm:px-6 max-w-5xl mx-auto">
         {/* Step dots only show for first 4 steps */}
-        {step <= 4 && <StepIndicator currentStep={step} totalSteps={4} />}
+        {/* {step <= 4 && <StepIndicator currentStep={step} totalSteps={4} />} */}
 
         <div className="mt-8">
           {step === 1 && <Step1_Themes onSelectTheme={handleThemeSelect} />}
@@ -225,7 +225,7 @@ export default function FlashbackOnboarding() {
           )}
         </div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
 
       {/* Toast notification */}
       {toastMessage && (

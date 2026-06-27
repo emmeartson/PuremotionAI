@@ -8,6 +8,7 @@ import heic2any from 'heic2any';
 
 export const Step3_Upload = ({ onNext, selectedTheme }) => {
   const requiresTwoImages = selectedTheme?.requiresTwoImages || false;
+  const isLoggedIn = !!localStorage.getItem("access_token");
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isLong, setIsLong] = useState(false); // false = 4 seconds, true = 8 seconds
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -302,7 +303,7 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
       </div>
 
       {/* Time selection (only if not submitting and uploadedFiles exist) */}
-      {uploadedFiles.length > 0 && !isSubmitting && (
+      {isLoggedIn && uploadedFiles.length > 0 && !isSubmitting && (
         <div className="mt-8 pt-6 border-t border-gray-200">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Clock size={18} className="text-[#7c602e]" />

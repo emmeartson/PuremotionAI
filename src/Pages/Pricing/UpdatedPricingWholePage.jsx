@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Check, Star, Lock, ShieldCheck, BadgeCheck, Sparkles, Clock } from "lucide-react";
-import { useSelector } from "react-redux";
+import { getVideoImageFiles } from "../../Redux/VideoUpload";
 import PaymentModal from "../Stripe/PaymentModal";
 import Footer from "../../Shared/Footer";
+import { Link } from "react-router-dom";
 
 const plans = [
     {
@@ -46,9 +47,16 @@ const plans = [
 export default function UpdatedPricingWholePage() {
     const [selected, setSelected] = useState("fortnightly_update");
     const [showPayment, setShowPayment] = useState(false);
+    const [previewImage, setPreviewImage] = useState("/grandfather.jpg");
 
-    // Dynamically load the user's uploaded image if available from Redux, otherwise fallback
-    const previewImage = useSelector((state) => state.videoUpload?.previewImage) || "/grandfather.jpg";
+    useEffect(() => {
+        const files = getVideoImageFiles();
+        if (files && files.image_one) {
+            const objectUrl = URL.createObjectURL(files.image_one);
+            setPreviewImage(objectUrl);
+            return () => URL.revokeObjectURL(objectUrl);
+        }
+    }, []);
 
     const selectedPlan = plans.find((p) => p.id === selected) || plans[1];
     const priceAmount = selectedPlan ? parseFloat(selectedPlan.price.replace("$", "")) : 0;
@@ -66,7 +74,9 @@ export default function UpdatedPricingWholePage() {
             {/* 2. Header */}
             <header className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/70 backdrop-blur-md">
                 <div className="mx-auto flex h-12 max-w-7xl items-center justify-center px-5 sm:h-14">
-                    <img src="/logo.png" alt="PureMotion" className="h-6 w-auto sm:h-7" />
+                    <Link to="/">
+                        <img src="/logo.png" alt="PureMotion" className="h-6 w-auto sm:h-7" />
+                    </Link>
                 </div>
             </header>
 
@@ -297,7 +307,7 @@ export default function UpdatedPricingWholePage() {
                 amount={`$${finalAmount}/${selectedPlan.period.toLowerCase()}`}
                 checkoutType="subscription"
             />
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 }
