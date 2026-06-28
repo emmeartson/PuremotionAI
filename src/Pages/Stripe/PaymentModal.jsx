@@ -216,7 +216,7 @@ function PaymentModal({
                 Complete your order to unlock your memory.
               </p>
 
-              <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-2 mt-2 text-[13px] text-gray-500">
+              <div className="flex items-center justify-center gap-x-1 sm:gap-x-2 mt-2 text-[10px] sm:text-[13px] text-gray-500 whitespace-nowrap overflow-hidden">
                 <span className="flex items-center gap-0.5"><span className="text-gray-400">✓</span> Secure checkout</span>
                 <span className="flex items-center gap-0.5"><span className="text-gray-400">✓</span> Cancel anytime</span>
                 <span className="flex items-center gap-0.5"><span className="text-gray-400">✓</span> 30 Days Guarantee</span>

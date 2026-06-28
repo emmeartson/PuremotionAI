@@ -164,7 +164,7 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
     : uploadedFiles.length >= 1;
 
   return (
-    <section className="mx-auto max-w-2xl px-5 pt-5 pb-8 sm:px-8 sm:pt-8 sm:pb-10 animate-in fade-in zoom-in-95 duration-500">
+    <section className="mx-auto max-w-2xl px-5 -pt-5 pb-8 sm:px-8 sm:pt-3 sm:pb-10 animate-in fade-in zoom-in-95 duration-500">
       <div className="text-center fade-up">
         <h1 className="font-serif text-3xl text-balance sm:text-5xl text-gray-900">
           {requiresTwoImages ? "Upload two photos" : "Start with a photo you love"}
@@ -180,9 +180,8 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        className={`mt-5 rounded-3xl border-2 border-dashed bg-[#fbf8f3] px-6 py-7 text-center transition-all sm:p-10 ${
-          uploadedFiles.length > 0 ? "border-[#7c602e]" : "border-gray-200 hover:border-[#7c602e]/50"
-        }`}
+        className={`mt-5 rounded-3xl border-2 border-dashed bg-[#fbf8f3] px-6 py-7 text-center transition-all sm:p-10 ${uploadedFiles.length > 0 ? "border-[#7c602e]" : "border-gray-200 hover:border-[#7c602e]/50"
+          }`}
       >
         <input
           ref={fileInputRef}
@@ -258,9 +257,8 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
                   {uploadedFiles.length < maxFiles && (
                     <div
                       onClick={!(isCompressing || isSubmitting) ? handleBrowseClick : undefined}
-                      className={`w-32 h-32 mt-0 mx-auto rounded-2xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center transition-all ${
-                        isCompressing ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:border-[#7c602e] hover:bg-white"
-                      }`}
+                      className={`w-32 h-32 mt-0 mx-auto rounded-2xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center transition-all ${isCompressing ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:border-[#7c602e] hover:bg-white"
+                        }`}
                     >
                       <Camera className="text-gray-400 mb-2" size={24} />
                       <p className="text-xs text-gray-500 font-medium text-center px-1">
@@ -314,21 +312,19 @@ export const Step3_Upload = ({ onNext, selectedTheme }) => {
           <div className="flex items-center justify-center gap-3">
             <button
               onClick={() => setIsLong(false)}
-              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                !isLong
-                  ? "bg-[#7c602e] text-white shadow-md"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${!isLong
+                ? "bg-[#7c602e] text-white shadow-md"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
             >
               4 Seconds
             </button>
             <button
               onClick={() => setIsLong(true)}
-              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                isLong
-                  ? "bg-[#7c602e] text-white shadow-md"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${isLong
+                ? "bg-[#7c602e] text-white shadow-md"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
             >
               8 Seconds <span className="text-xs opacity-75">(1+ credit)</span>
             </button>

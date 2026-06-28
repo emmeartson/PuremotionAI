@@ -62,14 +62,14 @@ export const Step5_Final = ({ onNext, previewImage }) => {
             <Heart className="h-5 w-5" /> Unlock My Full Video
           </button>
 
-          <p className="mt-4 text-[10px] text-gray-400 leading-relaxed font-medium max-w-xs mx-auto">
+          {/* <p className="mt-4 text-[10px] text-gray-400 leading-relaxed font-medium max-w-xs mx-auto">
             We respect your privacy. We will never sell, rent or share your email
             address. That's more than a{" "}
             <Link to="/privacy-policy" className="text-blue-600 underline">
               policy
             </Link>
             , it's our personal guarantee.
-          </p>
+          </p> */}
         </div>
       </div>
     </section>

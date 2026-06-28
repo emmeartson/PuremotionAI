@@ -45,7 +45,7 @@ export const Step_onlyemail = ({ onNext }) => {
   const googlePopupRef = useRef(null);
   const googleIntervalRef = useRef(null);
 
- const GOOGLE_AUTH_URL =
+  const GOOGLE_AUTH_URL =
     "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=https://www.puremotion.co/&prompt=consent&response_type=code&client_id=378868666274-f5mbkg4s1rnu8ik1g3amoce3fg1dhciv.apps.googleusercontent.com&scope=openid%20email%20profile&access_type=offline";
 
   // Cleanup Google popup on unmount
@@ -154,10 +154,10 @@ export const Step_onlyemail = ({ onNext }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Email submitted:", email);
-    
+
     try {
       const response = await dispatch(registerOrLogin({ email })).unwrap();
-      
+
       // Save data in the expected structure in local storage
       if (response.tokens) {
         localStorage.setItem("access_token", response.tokens.access);
@@ -170,7 +170,7 @@ export const Step_onlyemail = ({ onNext }) => {
 
       // Fire Meta Pixel Lead event after successful email submission
       trackLead();
-      
+
       if (onNext) {
         onNext(email);
       }
@@ -366,7 +366,7 @@ export const Step_onlyemail = ({ onNext }) => {
 
   return (
     <section className="relative overflow-hidden h-auto min-h-screen bg-[#fbf8f3]">
-      <AnnouncementBar />
+      {/* <AnnouncementBar /> */}
       <div className="absolute inset-0 bg-warm-glow pointer-events-none" />
 
       <div className="relative w-full mx-auto text-center animate-in fade-in zoom-in-95 duration-500 px-4 sm:px-0 pb-10">
@@ -424,7 +424,7 @@ export const Step_onlyemail = ({ onNext }) => {
                     {error.message || "An error occurred. Please try again."}
                   </p>
                 )}
-                
+
                 <p className="mt-1 flex items-center justify-center gap-1.5 text-xs text-gray-500">
                   <Lock className="h-3 w-3" /> We never share your email with anyone.
                 </p>
@@ -522,7 +522,7 @@ export const Step_onlyemail = ({ onNext }) => {
                     Forgot Password?
                   </span>
                 </div>
-                
+
                 <button
                   type="submit"
                   disabled={loading || googleLoading}
@@ -618,7 +618,7 @@ export const Step_onlyemail = ({ onNext }) => {
                   </div>
                 )}
                 <p className="text-sm text-gray-600 mb-2 text-center">
-                  We sent a reset code to <br/><strong>{otpEmail}</strong>
+                  We sent a reset code to <br /><strong>{otpEmail}</strong>
                 </p>
                 <input
                   type="text"

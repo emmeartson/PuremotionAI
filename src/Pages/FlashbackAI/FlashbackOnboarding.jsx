@@ -189,7 +189,7 @@ export default function FlashbackOnboarding() {
           <ChevronLeft size={18} /> Back
         </button>
 
-        <Link to="/">
+        <Link to="/" className="md:absolute md:left-1/2 md:-translate-x-1/2">
           <div className="text-lg sm:text-xl md:text-2xl font-serif tracking-tight text-[#7c602e] font-bold">
             PureMotion
           </div>

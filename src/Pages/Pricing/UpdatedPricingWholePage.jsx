@@ -181,9 +181,7 @@ export default function UpdatedPricingWholePage() {
                                     onClick={() => setSelected(p.id)}
                                     className={`flex w-full items-center justify-between gap-4 rounded-2xl border-2 text-left transition-all px-4 py-4 sm:px-6 sm:py-5 ${isSelected
                                         ? "border-[#8B6A2B] bg-[#FBF6EA] shadow-[0_18px_45px_-22px_rgba(139,106,43,0.45)]"
-                                        : isFamily
-                                            ? "border-[#8B6A2B]/70 bg-[#FBF6EA]/60 shadow-[0_18px_45px_-22px_rgba(139,106,43,0.4)] hover:border-[#8B6A2B]"
-                                            : "border-gray-200 bg-white shadow-sm hover:border-[#8B6A2B]/40"
+                                        : "border-gray-200 bg-white shadow-sm hover:border-[#8B6A2B]/40"
                                         }`}
                                 >
                                     {/* Left: name + description */}
