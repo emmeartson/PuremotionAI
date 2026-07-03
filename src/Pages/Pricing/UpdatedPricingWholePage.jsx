@@ -404,7 +404,7 @@ const COUNTRY_CURRENCY = {
 };
 
 function useCurrencyConversion() {
-    const [currencyData, setCurrencyData] = useState({ code: "USD", rate: 1, loading: true });
+    const [currencyData, setCurrencyData] = useState({ code: "AUD", rate: 1, loading: true });
 
     useEffect(() => {
         let cancelled = false;
@@ -414,26 +414,26 @@ function useCurrencyConversion() {
                 // Detect user's country (CORS-friendly API)
                 const geoRes = await fetch("https://api.country.is/");
                 const geoData = await geoRes.json();
-                const countryCode = geoData?.country || "US";
-                const detectedCurrency = COUNTRY_CURRENCY[countryCode] || "USD";
+                const countryCode = geoData?.country || "AU";
+                const detectedCurrency = COUNTRY_CURRENCY[countryCode] || "AUD";
 
-                if (detectedCurrency === "USD") {
-                    if (!cancelled) setCurrencyData({ code: "USD", rate: 1, loading: false });
+                if (detectedCurrency === "AUD") {
+                    if (!cancelled) setCurrencyData({ code: "AUD", rate: 1, loading: false });
                     return;
                 }
 
-                // Fetch live exchange rate from USD to detected currency
-                const rateRes = await fetch("https://open.er-api.com/v6/latest/USD");
+                // Fetch live exchange rate from AUD to detected currency
+                const rateRes = await fetch("https://open.er-api.com/v6/latest/AUD");
                 const rateData = await rateRes.json();
                 const rate = rateData?.rates?.[detectedCurrency];
 
                 if (!cancelled && rate) {
                     setCurrencyData({ code: detectedCurrency, rate, loading: false });
                 } else if (!cancelled) {
-                    setCurrencyData({ code: "USD", rate: 1, loading: false });
+                    setCurrencyData({ code: "AUD", rate: 1, loading: false });
                 }
             } catch {
-                if (!cancelled) setCurrencyData({ code: "USD", rate: 1, loading: false });
+                if (!cancelled) setCurrencyData({ code: "AUD", rate: 1, loading: false });
             }
         }
 
@@ -441,17 +441,18 @@ function useCurrencyConversion() {
         return () => { cancelled = true; };
     }, []);
 
-    const convertPrice = useCallback((usdPrice) => {
+    const convertPrice = useCallback((basePrice) => {
         // Parse numeric value from string like "$1.99" or plain number
-        const numericPrice = typeof usdPrice === "string"
-            ? parseFloat(usdPrice.replace(/[^0-9.]/g, ""))
-            : usdPrice;
+        const numericPrice = typeof basePrice === "string"
+            ? parseFloat(basePrice.replace(/[^0-9.]/g, ""))
+            : basePrice;
 
-        if (isNaN(numericPrice)) return usdPrice;
+        if (isNaN(numericPrice)) return basePrice;
 
         const converted = numericPrice * currencyData.rate;
 
-        if (currencyData.code === "USD") {
+        // Force a clean $ for both USD and AUD to avoid "US$" or "A$" artifacts
+        if (currencyData.code === "USD" || currencyData.code === "AUD") {
             return `$${converted.toFixed(2)}`;
         }
 
