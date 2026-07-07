@@ -451,9 +451,12 @@ function useCurrencyConversion() {
 
         const converted = numericPrice * currencyData.rate;
 
-        // Force a clean $ for both USD and AUD to avoid "US$" or "A$" artifacts
-        if (currencyData.code === "USD" || currencyData.code === "AUD") {
+        if (currencyData.code === "USD") {
             return `$${converted.toFixed(2)}`;
+        }
+        
+        if (currencyData.code === "AUD") {
+            return `A$${converted.toFixed(2)}`;
         }
 
         try {
