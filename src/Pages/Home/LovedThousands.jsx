@@ -190,7 +190,7 @@ function LovedThousands() {
 
       <Button
         className="w-full sm:w-auto bg-[#7A693B] hover:bg-[#5c522e] text-white px-4 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-base font-semibold flex items-center gap-2 shadow-md"
-        onClick={() => navigate("/flashback")}
+        onClick={() => navigate("/quiz")}
       >
         <span className="flex items-center gap-3 sm:gap-6">
           {/* <FaArrowRight />  */}

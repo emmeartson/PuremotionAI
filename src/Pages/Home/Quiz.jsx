@@ -48,6 +48,10 @@ function Quiz() {
     const [who, setWho] = useState(null);
     const [memory, setMemory] = useState(null);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     // Persist answers so other pages can reference if needed
     useEffect(() => {
         if (who || memory) {
