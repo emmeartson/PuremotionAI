@@ -88,18 +88,18 @@ export default function UpdatedPricingWholePage() {
                 <div className="absolute inset-0 bg-warm-glow pointer-events-none" />
                 <div className="relative mx-auto max-w-2xl px-5 pt-6 pb-4 text-center sm:pt-10 sm:pb-6">
                     <h1 className="mx-auto max-w-xl font-serif text-[1.75rem] leading-[1.1] text-balance sm:text-4xl text-gray-900">
-                        Your Memory Is Ready To{" "}
-                        <span className="italic text-[#8B6A2B]">Come Alive</span>
+                        Your Photo Is{" "}
+                        <span className="italic text-[#8B6A2B]">Ready</span>
                     </h1>
                     <p className="mx-auto mt-3 max-w-md text-[14px] text-gray-500 sm:text-base">
-                        We've prepared your memory and will keep it reserved while you choose a package.
+                        You're just one step away from bringing your photo to life.
                     </p>
                     <div className="mt-4 flex justify-center">
                         <button
                             onClick={scrollToPlans}
                             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-7 py-3 text-sm font-bold text-white shadow-[0_14px_30px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] active:scale-[0.99] sm:text-base"
                         >
-                            <Sparkles className="h-4 w-4" /> Unlock Your Memory
+                            <Sparkles className="h-4 w-4" /> Bring My Memory To Life
                         </button>
                     </div>
                 </div>
@@ -132,8 +132,8 @@ export default function UpdatedPricingWholePage() {
             {/* 4b. Social proof */}
             <section className="mx-auto max-w-2xl px-5 pt-2 pb-4">
                 <div className="mx-auto max-w-md text-center">
-                    <h2 className="font-serif text-lg font-semibold text-[#2B2118] sm:text-xl">
-                        Trusted by thousands of happy customers
+                    <h2 className="font-serif text-lg font-medium text-[#2B2118] sm:text-xl">
+                        Trusted by families around the world
                     </h2>
                     <div className="mt-3 flex items-center justify-center gap-3">
                         <div className="flex -space-x-2">
@@ -257,12 +257,12 @@ export default function UpdatedPricingWholePage() {
 
             {/* 8. Testimonials */}
             <section className="mx-auto max-w-4xl px-5 py-10 sm:py-14">
-                <h2 className="text-center font-serif text-2xl sm:text-3xl text-gray-900">Loved by families everywhere</h2>
+                <h2 className="text-center font-serif text-2xl sm:text-3xl text-gray-900">Bringing smiles to families around the world  </h2>
                 <div className="mt-6 grid gap-4 sm:grid-cols-3">
                     {[
-                        { name: "Jennifer", quote: "I cried instantly seeing him move again." },
-                        { name: "Michael", quote: "We literally gasped when the photo came alive." },
-                        { name: "Jessica", quote: "It felt like a moment I never thought I'd get back." },
+                        { name: "Margaret", quote: "I gave this to Mum for her birthday because she never stops talking about her parents. Watching her smile, laugh and quietly wipe away a tear as that old photo came to life is something I'll never forget — it's the most meaningful gift I've ever given her." },
+                        { name: "David", quote: "My wife lost her dad two years ago. When we sat the grandkids down and showed them Grandpa in that old holiday photo, everyone was in tears. It felt like he was in the room again." },
+                        { name: "Susan", quote: "Our wedding photo from 1978 has sat on the mantelpiece for decades. To see us both young and smiling at each other again, after 47 years — I honestly can't describe it." },
                     ].map((t) => (
                         <article key={t.name} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                             <div className="flex">
@@ -284,9 +284,9 @@ export default function UpdatedPricingWholePage() {
 
             {/* 9. Final CTA */}
             <section className="mx-auto max-w-2xl px-5 pb-4 text-center">
-                <h2 className="font-serif text-3xl sm:text-4xl text-gray-900">Don't leave this memory behind</h2>
+                <h2 className="font-serif text-3xl sm:text-4xl text-gray-900">Don't let this photo fade away</h2>
                 <p className="mx-auto mt-3 max-w-md text-[13px] text-gray-500 sm:text-sm">
-                    Your memory is ready and waiting. Unlock the full animation before your reserved offer expires.
+                    Your photo is safely waiting. Take a moment to bring it back to life while it's still here for you.
                 </p>
                 {/* <button
                     onClick={openCheckout}
@@ -454,7 +454,7 @@ function useCurrencyConversion() {
         if (currencyData.code === "USD") {
             return `$${converted.toFixed(2)}`;
         }
-        
+
         if (currencyData.code === "AUD") {
             return `A$${converted.toFixed(2)}`;
         }
