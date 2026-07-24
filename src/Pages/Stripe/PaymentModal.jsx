@@ -1,13 +1,10 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js/pure";
-import {
-  EmbeddedCheckoutProvider,
-  EmbeddedCheckout,
-} from "@stripe/react-stripe-js";
-import { FaTimes, FaShieldAlt } from "react-icons/fa";
+import { CheckoutElementsProvider } from "@stripe/react-stripe-js/checkout";
+import { FaTimes } from "react-icons/fa";
 import { BASE_URL, getAuthToken } from "../../Redux/Config";
-import logo from "../../../public/logo.png";
 import { trackInitiateCheckout, trackPurchase } from "../../utils/metaPixel";
+import CheckoutForm from "./CheckoutForm";
 
 const STRIPE_PK =
   "pk_live_51SyjT0F9gOu6UGqJaCZpoYQVM3uhfnMPl0r6o9DiTZZvgJaOf3FuuIIxBotZchJq5fvbQydek9fkoviI0UgKcYix00umqJ2PlV";
@@ -25,10 +22,14 @@ function PaymentModal({
   isOpen,
   onClose,
   priceId,
-  planName = "",
-  amount = "",
+  planName = "Family Package",
+  amount = "A$14.85",
   isExclusive = false,
   checkoutType = "subscription", // 'subscription' or 'package'
+  memoriesText = "15 memories",
+  unitPrice = "A$0.99 per memory",
+  savingsBadge = "SAVE 60%",
+  billingInterval = "Billed every 2 weeks",
 }) {
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
@@ -87,12 +88,9 @@ function PaymentModal({
 
         const data = await response.json();
 
-        // The backend returns a Checkout Session client secret (cs_test_...)
-        // Try multiple possible field names from the response
         let secret = data.client_secret || data.clientSecret;
 
         if (!secret) {
-          // If backend returns a checkout_url instead, fall back to redirect
           if (data.checkout_url) {
             window.open(data.checkout_url, "_blank");
             onClose?.();
@@ -101,14 +99,18 @@ function PaymentModal({
           throw new Error("No client secret received from server.");
         }
 
-        // Decode URL-encoded characters in the secret (backend may URL-encode it)
-        secret = decodeURIComponent(secret);
+        if (typeof secret === "string" && secret.includes("%")) {
+          try {
+            secret = decodeURIComponent(secret);
+          } catch (e) {
+            console.warn("Failed to decode secret URI component:", e);
+          }
+        }
 
         setClientSecret(secret);
 
-        // Meta Pixel: InitiateCheckout — checkout session created
-        // Parse numeric value from the amount prop (e.g. "$19.92/fortnight" → 19.92)
-        const numericValue = parseFloat(String(amount).replace(/[^0-9.]/g, '')) || 0;
+        // Meta Pixel: InitiateCheckout
+        const numericValue = parseFloat(String(amount).replace(/[^0-9.]/g, "")) || 0;
         trackInitiateCheckout(numericValue);
       } catch (err) {
         console.error("Payment session error:", err);
@@ -121,7 +123,7 @@ function PaymentModal({
     };
 
     fetchClientSecret();
-  }, [isOpen, priceId, isExclusive, checkoutType]);
+  }, [isOpen, priceId, isExclusive, checkoutType, amount, onClose]);
 
   // Reset state when modal closes
   useEffect(() => {
@@ -155,11 +157,10 @@ function PaymentModal({
   );
 
   const handleComplete = useCallback(() => {
-    // Meta Pixel: Purchase — checkout completed
-    const numericValue = parseFloat(String(amount).replace(/[^0-9.]/g, '')) || 0;
+    // Meta Pixel: Purchase
+    const numericValue = parseFloat(String(amount).replace(/[^0-9.]/g, "")) || 0;
     trackPurchase(numericValue);
 
-    // Called when checkout is complete
     onClose?.();
   }, [onClose, amount]);
 
@@ -168,7 +169,7 @@ function PaymentModal({
   return (
     <div
       id="payment-modal-overlay"
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
@@ -177,67 +178,81 @@ function PaymentModal({
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
-      {/* Modal Content */}
+      {/* Modal Card Container */}
       <div
-        className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden
-                    animate-[modalSlideUp_0.35s_ease-out]"
+        className="relative w-full max-w-[450px] bg-[#FAF8F5] rounded-[24px] sm:rounded-[28px] shadow-2xl overflow-hidden
+                   animate-[modalSlideUp_0.35s_ease-out] border border-[#EBE6DF]"
         style={{
-          maxHeight: "90vh",
+          maxHeight: "92vh",
         }}
       >
-        {/* Header */}
-        <div className="sticky top-0 z-10 bg-gradient-to-r from-[#f8f3eb] to-[#fdf8f0] border-b border-[#e6d8c4] px-6 py-4">
-          <div className="relative flex justify-center">
+        {/* Close Button */}
+        <button
+          id="close-payment-modal"
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 p-1.5 rounded-full hover:bg-black/5 transition-colors text-gray-400 hover:text-gray-600"
+          aria-label="Close payment modal"
+        >
+          <FaTimes className="text-base" />
+        </button>
 
-            {/* Close Button */}
-            <button
-              id="close-payment-modal"
-              onClick={onClose}
-              className="absolute top-0 right-0 p-2 rounded-full hover:bg-[#e6d8c4]/50 transition-colors text-[#7c602e]"
-              aria-label="Close payment modal"
+        {/* Scrollable Modal Content */}
+        <div
+          className="overflow-y-auto p-5 sm:p-6"
+          style={{ maxHeight: "calc(92vh - 10px)" }}
+        >
+          {/* Header */}
+          <div className="text-center pt-1">
+            <h2
+              id="payment-modal-title"
+              className="text-2xl sm:text-[28px] text-gray-900 font-serif leading-tight"
             >
-              <FaTimes className="text-lg" />
-            </button>
+              Your Memory Is <span className="font-serif italic font-normal text-[#856734]">Ready</span>
+            </h2>
 
-            {/* Center Content */}
-            <div className="flex flex-col items-center text-center">
-              {/* <img src={logo} alt="Logo" className="h-8 mb-2" /> */}
+            <p className="text-xs sm:text-sm text-[#78716C] mt-1.5">
+              Complete your order to unlock your memory.
+            </p>
 
-              <h2
-                id="payment-modal-title"
-                className="text-[25px] sm:text-[30px] text-gray-900 font-serif leading-[0.6]"
-              >
-                Your Memory Is <span className="text-[#967431] italic">Ready</span>
-                {/* <br /> */}
-                {/* To <span className="text-[#967431] italic">Come Alive</span> */}
-              </h2>
-
-              <p className="text-[15px] text-gray-500 mt-4 px-4 max-w-sm">
-                Complete your order to unlock your memory.
-              </p>
-
-              <div className="flex items-center justify-center gap-x-1 sm:gap-x-2 mt-2 text-[10px] sm:text-[13px] text-gray-500 whitespace-nowrap overflow-hidden">
-                <span className="flex items-center gap-0.5"><span className="text-gray-400">✓</span> Secure checkout</span>
-                <span className="flex items-center gap-0.5"><span className="text-gray-400">✓</span> Cancel anytime</span>
-                <span className="flex items-center gap-0.5"><span className="text-gray-400">✓</span> 30 Days Guarantee</span>
-              </div>
+            <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 mt-3 text-[11px] sm:text-xs text-[#57534E] whitespace-nowrap">
+              <span className="flex items-center gap-1">
+                <span className="text-[#10B981] font-bold">✓</span> Secure Checkout
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="text-[#10B981] font-bold">✓</span> Cancel Anytime
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="text-[#10B981] font-bold">✓</span> 30-Day Guarantee
+              </span>
             </div>
           </div>
-        </div>
 
-        {/* Body */}
-        <div
-          className="overflow-y-auto pb-10 pt-5"
-          style={{ maxHeight: "calc(90vh - 120px)" }}
-        >
+          {/* Package Summary Box */}
+          <div className="bg-white border border-[#EBE6DF] rounded-2xl p-4 mt-5 shadow-sm">
+            <div className="flex items-baseline justify-between">
+              <span className="font-bold text-gray-900 text-base">{planName}</span>
+              <span className="font-serif font-medium text-gray-900 text-lg">{amount}</span>
+            </div>
+            <div className="flex items-center justify-between mt-1 text-xs text-[#78716C]">
+              <span>{memoriesText}</span>
+              <span>{unitPrice}</span>
+            </div>
+            <div className="flex items-center justify-between mt-2.5">
+              <span className="bg-[#E6F4EA] text-[#137333] text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                {savingsBadge}
+              </span>
+              <span className="text-xs text-[#9CA3AF]">{billingInterval}</span>
+            </div>
+          </div>
+
           {/* Loading State */}
           {loading && (
-            <div className="flex flex-col items-center justify-center py-16 gap-4">
+            <div className="flex flex-col items-center justify-center py-12 gap-4">
               <div className="relative">
-                <div className="w-12 h-12 rounded-full border-4 border-[#e6d8c4]" />
-                <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-transparent border-t-[#7c602e] animate-spin" />
+                <div className="w-10 h-10 rounded-full border-3 border-[#E5DFD5]" />
+                <div className="absolute top-0 left-0 w-10 h-10 rounded-full border-3 border-transparent border-t-[#856734] animate-spin" />
               </div>
-              <p className="text-[#7c602e] font-medium text-sm">
+              <p className="text-[#856734] font-medium text-xs">
                 Preparing secure checkout...
               </p>
             </div>
@@ -245,10 +260,10 @@ function PaymentModal({
 
           {/* Error State */}
           {error && !loading && (
-            <div className="flex flex-col items-center justify-center py-12 gap-4 px-6">
-              <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center">
+            <div className="flex flex-col items-center justify-center py-10 gap-3 px-4">
+              <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
                 <svg
-                  className="w-8 h-8 text-red-400"
+                  className="w-6 h-6 text-red-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -262,57 +277,74 @@ function PaymentModal({
                 </svg>
               </div>
               <div className="text-center">
-                <p className="text-gray-800 font-semibold mb-1">
+                <p className="text-gray-800 font-semibold text-sm mb-1">
                   Payment Setup Failed
                 </p>
-                <p className="text-sm text-gray-500 max-w-xs">{error}</p>
+                <p className="text-xs text-gray-500 max-w-xs">{error}</p>
               </div>
               <button
                 onClick={() => {
                   setError(null);
                   setClientSecret("");
-                  // Re-trigger fetch by toggling loading briefly
                   setLoading(true);
                   setTimeout(() => setLoading(false), 100);
                 }}
-                className="px-6 py-2.5 bg-[#7c602e] text-white rounded-xl text-sm font-semibold
-                                           hover:bg-[#634910] transition-colors"
+                className="px-5 py-2 bg-[#856734] text-white rounded-xl text-xs font-semibold
+                           hover:bg-[#74582B] transition-colors cursor-pointer"
               >
                 Try Again
               </button>
             </div>
           )}
 
-          {/* Stripe Embedded Checkout */}
+          {/* Stripe Custom Checkout Provider */}
           {clientSecret && !loading && !error && (
             <div id="checkout-container">
-              <EmbeddedCheckoutProvider
+              <CheckoutElementsProvider
+                key={clientSecret}
                 stripe={getStripePromise()}
                 options={{
                   clientSecret,
-                  onComplete: handleComplete,
+                  elementsOptions: {
+                    appearance: {
+                      theme: "flat",
+                      variables: {
+                        fontFamily: "Inter, system-ui, -apple-system, sans-serif",
+                        colorBackground: "#FDFBF7",
+                        colorText: "#1C1917",
+                        colorDanger: "#EF4444",
+                        colorTextPlaceholder: "#9CA3AF",
+                        borderRadius: "12px",
+                        borderColor: "#968c78",
+                        colorPrimary: "#856734",
+                      },
+                    },
+                  },
                 }}
               >
-                <EmbeddedCheckout />
-              </EmbeddedCheckoutProvider>
+                <CheckoutForm
+                  onSuccess={handleComplete}
+                  onError={(err) => setError(err.message)}
+                />
+              </CheckoutElementsProvider>
             </div>
           )}
         </div>
       </div>
 
-      {/* Custom Animation Keyframes */}
+      {/* Animation Keyframes */}
       <style>{`
-                @keyframes modalSlideUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(24px) scale(0.96);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0) scale(1);
-                    }
-                }
-            `}</style>
+        @keyframes modalSlideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.97);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 }

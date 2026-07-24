@@ -49,11 +49,10 @@ export default function PaymentTestPage() {
                     <button
                         key={pkg.id}
                         onClick={() => setSelectedPkg(pkg)}
-                        className={`px-6 py-4 rounded-xl border-2 transition-all text-left min-w-[200px] ${
-                            selectedPkg.id === pkg.id
+                        className={`px-6 py-4 rounded-xl border-2 transition-all text-left min-w-[200px] ${selectedPkg.id === pkg.id
                                 ? 'border-[#7c602e] bg-white shadow-lg ring-2 ring-[#7c602e]/20'
                                 : 'border-[#e6d8c4] bg-white/60 hover:border-[#a67c3d]'
-                        }`}
+                            }`}
                     >
                         <p className="font-bold text-[#634910]">{pkg.name}</p>
                         <p className="text-sm text-[#9c8f73]">
