@@ -231,16 +231,22 @@ function PaymentModal({
           <div className="bg-white border border-[#EBE6DF] rounded-2xl p-4 mt-5 shadow-sm">
             <div className="flex items-baseline justify-between">
               <span className="font-bold text-gray-900 text-base">{planName}</span>
-              <span className="font-serif font-medium text-gray-900 text-lg">{amount}</span>
+              <span className="font-serif font-medium text-gray-900 text-lg">
+                {typeof amount === 'string' ? amount.split('/')[0].trim() : amount}
+              </span>
             </div>
             <div className="flex items-center justify-between mt-1 text-xs text-[#78716C]">
               <span>{memoriesText}</span>
               <span>{unitPrice}</span>
             </div>
             <div className="flex items-center justify-between mt-2.5">
-              <span className="bg-[#E6F4EA] text-[#137333] text-[10px] font-bold px-2.5 py-0.5 rounded-full">
-                {savingsBadge}
-              </span>
+              {planName?.toLowerCase().includes("family") ? (
+                <span className="bg-[#E6F4EA] text-[#137333] text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                  {savingsBadge}
+                </span>
+              ) : (
+                <span />
+              )}
               <span className="text-xs text-[#9CA3AF]">{billingInterval}</span>
             </div>
           </div>
