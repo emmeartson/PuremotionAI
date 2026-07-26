@@ -161,29 +161,20 @@ const CheckoutForm = ({ onSuccess, onError }) => {
 
         {/* Card Brand Badges */}
         <div className="flex items-center justify-center gap-1.5 flex-wrap pt-0.5">
-          {/* JCB */}
-          <span className="inline-flex items-center justify-center bg-white border border-[#EBE5DC] rounded px-1.5 py-0.5 h-5 text-[9px] font-bold text-[#0B4EA2]">
-            JCB
-          </span>
-          {/* Mastercard */}
-          <span className="inline-flex items-center justify-center bg-white border border-[#EBE5DC] rounded px-1.5 py-0.5 h-5">
-            <svg className="h-[#12px] w-auto" viewBox="0 0 38 24">
-              <circle cx="14" cy="12" r="10" fill="#EB001B" />
-              <circle cx="24" cy="12" r="10" fill="#F79E1B" fillOpacity="0.85" />
-            </svg>
-          </span>
-          {/* AMEX */}
-          <span className="inline-flex items-center justify-center bg-[#006FCF] rounded px-1.5 py-0.5 h-5 text-[9px] font-bold text-white">
-            AMEX
-          </span>
-          {/* Discover */}
-          <span className="inline-flex items-center justify-center bg-white border border-[#EBE5DC] rounded px-1.5 py-0.5 h-5 text-[8px] font-bold text-[#FF6000]">
-            DISCOVER
-          </span>
-          {/* Google Pay */}
-          <span className="inline-flex items-center justify-center bg-white border border-[#EBE5DC] rounded px-1.5 py-0.5 h-5 text-[9px] font-bold text-[#3C4043]">
-            G Pay
-          </span>
+          {(["visa", "mastercard", "amex", "applepay", "googlepay"]).map((name) => {
+            const images = {
+              visa: "/visa.png",
+              mastercard: "/master.png",
+              amex: "/amex.png",
+              applepay: "/applepay.png",
+              googlepay: "/googlepay.webp"
+            };
+            return (
+              <div key={name} className="inline-flex h-7 w-[46px] items-center justify-center rounded-md border border-[#EBE5DC] bg-white shadow-sm overflow-hidden p-1">
+                <img src={images[name]} alt={name} className="h-full w-full object-contain" />
+              </div>
+            );
+          })}
         </div>
       </div>
     </form>

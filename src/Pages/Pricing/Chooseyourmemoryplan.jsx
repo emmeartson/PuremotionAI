@@ -145,6 +145,9 @@ export default function Chooseyourmemoryplan() {
                 planName={selectedPlan.name}
                 amount={`$${finalAmount}/${selectedPlan.period.toLowerCase()}`}
                 checkoutType="subscription"
+                memoriesText={`${selectedPlan.credits} memories`}
+                unitPrice={`${selectedPlan.price} ${selectedPlan.unit}`}
+                billingInterval={`Billed every ${selectedPlan.period === 'Fortnight' ? '2 weeks' : selectedPlan.period.toLowerCase()}`}
             />
         </>
     );

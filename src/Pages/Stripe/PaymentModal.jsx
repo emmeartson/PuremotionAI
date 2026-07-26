@@ -5,6 +5,7 @@ import { FaTimes } from "react-icons/fa";
 import { BASE_URL, getAuthToken } from "../../Redux/Config";
 import { trackInitiateCheckout, trackPurchase } from "../../utils/metaPixel";
 import CheckoutForm from "./CheckoutForm";
+import useCurrencyConversion from "../../utils/currency";
 
 const STRIPE_PK =
   "pk_live_51SyjT0F9gOu6UGqJaCZpoYQVM3uhfnMPl0r6o9DiTZZvgJaOf3FuuIIxBotZchJq5fvbQydek9fkoviI0UgKcYix00umqJ2PlV";
@@ -34,6 +35,37 @@ function PaymentModal({
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const { convertPrice } = useCurrencyConversion();
+
+  let derivedMemoriesText = memoriesText;
+  let derivedUnitPrice = unitPrice;
+  let derivedBillingInterval = billingInterval;
+
+  if (planName?.toLowerCase().includes("starter")) {
+    derivedMemoriesText = "4 memories";
+    derivedUnitPrice = "$1.99 per memory";
+    derivedBillingInterval = "Billed every week";
+  } else if (planName?.toLowerCase().includes("premium")) {
+    derivedMemoriesText = "30 memories";
+    derivedUnitPrice = "$0.69 per memory";
+    derivedBillingInterval = "Billed every month";
+  } else if (planName?.toLowerCase().includes("family")) {
+    derivedMemoriesText = "15 memories";
+    derivedUnitPrice = "$0.99 per memory";
+    derivedBillingInterval = "Billed every 2 weeks";
+  }
+
+  const getDisplayUnitPrice = () => {
+    if (typeof derivedUnitPrice === 'string') {
+      const match = derivedUnitPrice.match(/^(.*?[\d.]+)(.*)$/);
+      if (match) {
+        return `${convertPrice(match[1])}${match[2]}`;
+      }
+      return convertPrice(derivedUnitPrice);
+    }
+    return derivedUnitPrice;
+  };
 
   // Fetch client secret when modal opens
   useEffect(() => {
@@ -236,8 +268,8 @@ function PaymentModal({
               </span>
             </div>
             <div className="flex items-center justify-between mt-1 text-xs text-[#78716C]">
-              <span>{memoriesText}</span>
-              <span>{unitPrice}</span>
+              <span>{derivedMemoriesText}</span>
+              <span>{getDisplayUnitPrice()}</span>
             </div>
             <div className="flex items-center justify-between mt-2.5">
               {planName?.toLowerCase().includes("family") ? (
@@ -247,7 +279,7 @@ function PaymentModal({
               ) : (
                 <span />
               )}
-              <span className="text-xs text-[#9CA3AF]">{billingInterval}</span>
+              <span className="text-xs text-[#9CA3AF]">{derivedBillingInterval}</span>
             </div>
           </div>
 

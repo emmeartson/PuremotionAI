@@ -337,6 +337,9 @@ export const PricingSection = () => {
         planName={selectedPackage.name}
         amount={`$${finalAmount}/${selectedPackage.period.toLowerCase()}`}
         checkoutType="subscription"
+        memoriesText={`${selectedPackage.credits} memories`}
+        unitPrice={`${selectedPackage.price} per memory`}
+        billingInterval={`Billed every ${selectedPackage.period === 'Fortnight' ? '2 weeks' : selectedPackage.period.toLowerCase()}`}
       />
     </section>
   );
