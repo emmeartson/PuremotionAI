@@ -36,6 +36,10 @@ function Footer() {
             <Link to="/terms-of-service" className="hover:underline">
               Terms of Service
             </Link>
+            <span className="border-l border-gray-300 h-3" />
+            <Link to="/subscription-and-refund-policy" className="hover:underline">
+              Subscription and Refund Policy
+            </Link>
           </div>
         </div>
       </div>

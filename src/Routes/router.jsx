@@ -25,6 +25,7 @@ const FinalResult = lazy(() => import("../Pages/Dashboard/FinalResult"));
 const ContactForm = lazy(() => import("../Pages/Home/ContactForm"));
 const PrivacyPolicy = lazy(() => import("../Shared/PrivacyPolicy"));
 const TnC = lazy(() => import("../Shared/TnC"));
+const SubscriptionAndRefundPolicy = lazy(() => import("../Shared/SubscriptionAndRefundPolicy"));
 const Test = lazy(() => import("../Pages/Dashboard/test"));
 const PaymentTestPage = lazy(() => import("../Pages/Stripe/PaymentTestPage"));
 const Step_onlyemail = lazy(() => import("../Pages/FlashbackAI/Step_onlyemail"));
@@ -89,6 +90,10 @@ export const router = createBrowserRouter([
   {
     path: "/terms-of-service",
     element: <L><TnC /></L>,
+  },
+  {
+    path: "/subscription-and-refund-policy",
+    element: <L><SubscriptionAndRefundPolicy /></L>,
   },
   {
     path: "/quiz",
