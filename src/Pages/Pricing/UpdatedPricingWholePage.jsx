@@ -133,6 +133,8 @@ export default function UpdatedPricingWholePage() {
     const openCheckout = () => setShowPayment(true);
     const scrollToPlans = () =>
         document.getElementById("plans")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const scrollToPricingIntro = () =>
+        document.getElementById("pricing-intro")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
     return (
         <div className="min-h-screen bg-[#fbf8f3] pb-4 sm:pb-0">
@@ -295,7 +297,7 @@ export default function UpdatedPricingWholePage() {
             </section> */}
 
             {/* 4c. Pricing intro */}
-            <section className="mx-auto max-w-2xl px-5 pt-10 pb-4 text-center">
+            <section id="pricing-intro" className="mx-auto max-w-2xl scroll-mt-20 px-5 pt-10 pb-4 text-center">
                 <h2 className="font-serif text-[1.65rem] sm:text-3xl font-medium text-[#2B2118]">
                     Choose the package that feels right
                 </h2>
@@ -538,13 +540,13 @@ export default function UpdatedPricingWholePage() {
                 <p className="mx-auto mt-3 max-w-md text-[13px] text-gray-500 sm:text-sm">
                     Turn this treasured photo into a living memory you can download, keep and share with the people you love.
                 </p>
-                {/* <button
-                    onClick={openCheckout}
+                <button
+                    onClick={scrollToPricingIntro}
                     className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-6 py-4 text-base font-bold text-white shadow-[0_18px_40px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] sm:w-auto sm:px-10 sm:text-lg"
                 >
-                    Unlock Your Memory
-                </button> */}
-                <p className="mt-3 inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12px] text-gray-500">
+                    Bring my photo to life
+                </button>
+                <p className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12px] text-gray-500">
                     <ShieldCheck className="h-3.5 w-3.5 text-green-500" /> Secure checkout
                     <span>·</span> Cancel anytime <span>·</span> 30-day guarantee
                 </p>
