@@ -10,6 +10,9 @@ import useCurrencyConversion from "../../utils/currency";
 const STRIPE_PK =
   "pk_live_51SyjT0F9gOu6UGqJaCZpoYQVM3uhfnMPl0r6o9DiTZZvgJaOf3FuuIIxBotZchJq5fvbQydek9fkoviI0UgKcYix00umqJ2PlV";
 
+// const STRIPE_PK =
+//   "pk_test_51SyjT0F9gOu6UGqJ75C0uDkBRZobn10YFNaKJp0cKXSnqqc18dAxuFESsQhvtP5crktUoXoaqL35eewt7nYsMIfl00nnkbamAm";
+
 // Lazy-load Stripe only when needed (avoids telemetry beacons on every page)
 let stripePromise = null;
 const getStripePromise = () => {
@@ -26,6 +29,7 @@ function PaymentModal({
   planName = "Family Package",
   amount = "A$14.85",
   isExclusive = false,
+  isImagePackage = false,
   checkoutType = "subscription", // 'subscription' or 'package'
   memoriesText = "15 memories",
   unitPrice = "A$0.99 per memory",
@@ -98,7 +102,7 @@ function PaymentModal({
         const body =
           checkoutType === "package"
             ? { price_id: priceId }
-            : { price_id: priceId, is_exclusive: isExclusive };
+            : { price_id: priceId, is_exclusive: isExclusive, is_image_package: isImagePackage };
 
         const response = await fetch(endpoint, {
           method: "POST",
@@ -279,7 +283,7 @@ function PaymentModal({
               ) : (
                 <span />
               )}
-              <span className="text-xs text-[#9CA3AF]">{derivedBillingInterval}</span>
+              {/* <span className="text-xs text-[#9CA3AF]">{derivedBillingInterval}</span> */}
             </div>
           </div>
 
