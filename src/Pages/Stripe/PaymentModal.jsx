@@ -250,7 +250,7 @@ function PaymentModal({
               Complete your order to unlock your memory.
             </p>
 
-            <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 mt-3 text-[11px] sm:text-xs text-[#57534E] whitespace-nowrap">
+            {/* <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 mt-3 text-[11px] sm:text-xs text-[#57534E] whitespace-nowrap">
               <span className="flex items-center gap-1">
                 <span className="text-[#10B981] font-bold">✓</span> Secure Checkout
               </span>
@@ -260,7 +260,7 @@ function PaymentModal({
               <span className="flex items-center gap-1">
                 <span className="text-[#10B981] font-bold">✓</span> 30-Day Guarantee
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Package Summary Box */}
@@ -273,7 +273,6 @@ function PaymentModal({
             </div>
             <div className="flex items-center justify-between mt-1 text-xs text-[#78716C]">
               <span>{derivedMemoriesText}</span>
-              <span>{getDisplayUnitPrice()}</span>
             </div>
             <div className="flex items-center justify-between mt-2.5">
               {planName?.toLowerCase().includes("family") ? (

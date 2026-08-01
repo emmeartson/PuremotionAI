@@ -73,11 +73,11 @@ const FaqContent = ({ children }) => (
 const plans = [
     {
         id: "image_package",
-        name: "Image package",
+        name: "3 Photo Animations",
         price: "$2",
         oldPrice: null,
         badge: null,
-        desc: "3 Image with full access for 7 days",
+        desc: "7-Days Access",
         price_id: "price_1TzICLF9gOu6UGqJJ1uJ72gn",
         image_amount: 3,
         period: "Week",
