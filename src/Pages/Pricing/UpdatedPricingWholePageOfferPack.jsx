@@ -73,7 +73,7 @@ const FaqContent = ({ children }) => (
 const plans = [
     {
         id: "image_package",
-        name: "3 Photo Animations",
+        name: "7-Day Full Access",
         price: "$2",
         oldPrice: null,
         badge: null,
@@ -171,72 +171,7 @@ export default function UpdatedPricingWholePage() {
                 </div>
             </section>
 
-            {/* 4a-2. What's Included */}
-            <section className="mx-auto max-w-6xl px-5 py-10 sm:py-14">
-                <div className="mx-auto max-w-2xl text-center">
-                    <h2 className="font-serif text-2xl sm:text-3xl text-[#2B2118]">
-                        What's included?
-                    </h2>
-                    <p className="mx-auto mt-3 max-w-xl text-[13px] text-gray-500 sm:text-lg">
-                        Everything you need to bring your most meaningful photos to life.
-                    </p>
-                </div>
 
-                <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
-                    {[
-                        {
-                            icon: LayoutDashboard,
-                            title: "Your PureMotion dashboard",
-                            body: "Keep your uploaded photos and finished videos organised in one convenient place.",
-                        },
-                        {
-                            icon: ImageIcon,
-                            title: "Photo-to-video animation",
-                            body: "Turn a single photo into a short, expressive video with natural movement.",
-                        },
-                        {
-                            icon: Sliders,
-                            title: "Multiple movement styles",
-                            body: "Choose from available movements and expressions to suit your photo.",
-                        },
-                        {
-                            icon: Share2,
-                            title: "Download, keep and share",
-                            body: "Save your videos to your device and share them with family and friends.",
-                        },
-                        {
-                            icon: Download,
-                            title: "HD, watermark-free downloads",
-                            body: "Download high-quality videos without a PureMotion watermark.",
-                        },
-                        {
-                            icon: LayoutDashboard,
-                            title: "Free storage and account access",
-                            body: "Access your stored photos and finished videos anytime in your PureMotion account at no extra cost.",
-                        },
-                    ].map((feature) => {
-                        const Icon = feature.icon;
-                        return (
-                            <div
-                                key={feature.title}
-                                className="flex h-full flex-col rounded-2xl border border-[#E7DBC4] bg-white p-5 shadow-[0_2px_10px_-4px_rgba(139,106,43,0.15)] sm:p-6"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#D9C39A] bg-[#FBF6EB]">
-                                        <Icon className="h-4 w-4 text-[#8B6A2B]" strokeWidth={1.8} />
-                                    </span>
-                                    <h3 className="font-serif text-base font-bold text-[#2B2118] sm:text-xl">
-                                        {feature.title}
-                                    </h3>
-                                </div>
-                                <p className="mt-2.5 text-[12px] leading-relaxed text-[#5C4A32] sm:text-lg">
-                                    {feature.body}
-                                </p>
-                            </div>
-                        );
-                    })}
-                </div>
-            </section>
 
 
             {/* 4b. Social proof */}
@@ -274,10 +209,10 @@ export default function UpdatedPricingWholePage() {
             {/* 4c. Pricing intro */}
             <section id="pricing-intro" className="mx-auto max-w-2xl scroll-mt-20 px-5 pt-10 pb-4 text-center">
                 <h2 className="font-serif text-[1.65rem] sm:text-3xl font-medium text-[#2B2118]">
-                    Choose the package that feels right
+                    Unlock Your Photo Animation
                 </h2>
                 <p className="mx-auto mt-2 max-w-xl text-[13px] text-[#5C4A32] sm:text-lg">
-                    PureMotion will guide you through bringing your photo to life, even if you're not confident with technology.
+                    Get 7-day full access with 3 photo animations.
                 </p>
             </section>
 
@@ -355,13 +290,16 @@ export default function UpdatedPricingWholePage() {
                     onClick={openCheckout}
                     className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B6A2B] px-6 py-4 text-base font-bold text-white shadow-[0_18px_40px_-12px_rgba(139,106,43,0.55)] transition-all hover:bg-[#74591F] sm:text-lg"
                 >
-                    Unlock Your Memory
+                    Bring my photo to life
                 </button>
 
                 <p className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12px] text-gray-500">
                     <Check className="h-3 w-3 text-green-500" strokeWidth={3} /> Secure checkout <span>·</span> Cancel anytime <span>·</span> 30-day guarantee
                 </p>
             </section>
+
+
+
 
             {/* 6. Trust / payment row */}
             <section className="mx-auto max-w-2xl px-5 pt-5">
@@ -374,6 +312,73 @@ export default function UpdatedPricingWholePage() {
                     <p className="inline-flex items-center gap-1.5 text-[11px] text-gray-500">
                         <Lock className="h-3 w-3" /> Payments securely processed by Stripe
                     </p>
+                </div>
+            </section>
+
+            {/* 4a-2. What's Included */}
+            <section className="mx-auto max-w-6xl px-5 py-10 sm:py-14">
+                <div className="mx-auto max-w-2xl text-center">
+                    <h2 className="font-serif text-2xl sm:text-3xl text-[#2B2118]">
+                        What's included?
+                    </h2>
+                    <p className="mx-auto mt-3 max-w-xl text-[13px] text-gray-500 sm:text-lg">
+                        Everything you need to bring your most meaningful photos to life.
+                    </p>
+                </div>
+
+                <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
+                    {[
+                        {
+                            icon: LayoutDashboard,
+                            title: "Your PureMotion dashboard",
+                            body: "Keep your uploaded photos and finished videos organised in one convenient place.",
+                        },
+                        {
+                            icon: ImageIcon,
+                            title: "Photo-to-video animation",
+                            body: "Turn a single photo into a short, expressive video with natural movement.",
+                        },
+                        {
+                            icon: Sliders,
+                            title: "Multiple movement styles",
+                            body: "Choose from available movements and expressions to suit your photo.",
+                        },
+                        {
+                            icon: Share2,
+                            title: "Download, keep and share",
+                            body: "Save your videos to your device and share them with family and friends.",
+                        },
+                        {
+                            icon: Download,
+                            title: "HD, watermark-free downloads",
+                            body: "Download high-quality videos without a PureMotion watermark.",
+                        },
+                        {
+                            icon: LayoutDashboard,
+                            title: "Free storage and account access",
+                            body: "Access your stored photos and finished videos anytime in your PureMotion account at no extra cost.",
+                        },
+                    ].map((feature) => {
+                        const Icon = feature.icon;
+                        return (
+                            <div
+                                key={feature.title}
+                                className="flex h-full flex-col rounded-2xl border border-[#E7DBC4] bg-white p-5 shadow-[0_2px_10px_-4px_rgba(139,106,43,0.15)] sm:p-6"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#D9C39A] bg-[#FBF6EB]">
+                                        <Icon className="h-4 w-4 text-[#8B6A2B]" strokeWidth={1.8} />
+                                    </span>
+                                    <h3 className="font-serif text-base font-bold text-[#2B2118] sm:text-xl">
+                                        {feature.title}
+                                    </h3>
+                                </div>
+                                <p className="mt-2.5 text-[12px] leading-relaxed text-[#5C4A32] sm:text-lg">
+                                    {feature.body}
+                                </p>
+                            </div>
+                        );
+                    })}
                 </div>
             </section>
 
@@ -535,7 +540,7 @@ export default function UpdatedPricingWholePage() {
                 amount={`${finalAmountDisplay}/${selectedPlan.period.toLowerCase()}`}
                 isImagePackage={true}
                 checkoutType="subscription"
-                memoriesText={`${selectedPlan.image_amount || selectedPlan.credits || 0} memories`}
+                memoriesText={`${selectedPlan.image_amount || selectedPlan.credits || 0} Photo`}
                 unitPrice={`${selectedPlan.price} ${selectedPlan.unit || ""}`.trim()}
                 billingInterval={`Billed every ${selectedPlan.period === 'Fortnight' ? '2 weeks' : selectedPlan.period.toLowerCase()}`}
             />
