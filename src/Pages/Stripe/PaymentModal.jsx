@@ -272,7 +272,9 @@ function PaymentModal({
               </span>
             </div>
             <div className="flex items-center justify-between mt-1 text-xs text-[#78716C]">
-              <span>{derivedMemoriesText}</span>
+              {/* <span>{derivedMemoriesText}</span> */}
+              <span>7-Day Full Access</span>
+
             </div>
             <div className="flex items-center justify-between mt-2.5">
               {planName?.toLowerCase().includes("family") ? (
