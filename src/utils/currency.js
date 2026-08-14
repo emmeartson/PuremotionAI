@@ -18,7 +18,7 @@ export const COUNTRY_CURRENCY = {
 };
 
 export default function useCurrencyConversion() {
-    const [currencyData, setCurrencyData] = useState({ code: "AUD", rate: 1, loading: true });
+    const [currencyData, setCurrencyData] = useState({ code: "USD", rate: 1, loading: true });
 
     useEffect(() => {
         let cancelled = false;
@@ -28,26 +28,26 @@ export default function useCurrencyConversion() {
                 // Detect user's country (CORS-friendly API)
                 const geoRes = await fetch("https://api.country.is/");
                 const geoData = await geoRes.json();
-                const countryCode = geoData?.country || "AU";
-                const detectedCurrency = COUNTRY_CURRENCY[countryCode] || "AUD";
+                const countryCode = geoData?.country || "US";
+                const detectedCurrency = COUNTRY_CURRENCY[countryCode] || "USD";
 
-                if (detectedCurrency === "AUD") {
-                    if (!cancelled) setCurrencyData({ code: "AUD", rate: 1, loading: false });
+                if (detectedCurrency === "USD") {
+                    if (!cancelled) setCurrencyData({ code: "USD", rate: 1, loading: false });
                     return;
                 }
 
-                // Fetch live exchange rate from AUD to detected currency
-                const rateRes = await fetch("https://open.er-api.com/v6/latest/AUD");
+                // Fetch live exchange rate from USD to detected currency
+                const rateRes = await fetch("https://open.er-api.com/v6/latest/USD");
                 const rateData = await rateRes.json();
                 const rate = rateData?.rates?.[detectedCurrency];
 
                 if (!cancelled && rate) {
                     setCurrencyData({ code: detectedCurrency, rate, loading: false });
                 } else if (!cancelled) {
-                    setCurrencyData({ code: "AUD", rate: 1, loading: false });
+                    setCurrencyData({ code: "USD", rate: 1, loading: false });
                 }
             } catch {
-                if (!cancelled) setCurrencyData({ code: "AUD", rate: 1, loading: false });
+                if (!cancelled) setCurrencyData({ code: "USD", rate: 1, loading: false });
             }
         }
 

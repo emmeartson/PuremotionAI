@@ -6,11 +6,11 @@ export const plans = [
     {
         id: "image_package",
         name: "3 Photo Animations",
-        price: "$2",
+        price: "$2 USD",
         oldPrice: null,
         badge: null,
         desc: "7-Days Access",
-        price_id: "price_1TzICLF9gOu6UGqJJ1uJ72gn",
+        price_id: "price_1U4479F9gOu6UGqJPz8sI49a",
         image_amount: 3,
         period: "Week",
     }

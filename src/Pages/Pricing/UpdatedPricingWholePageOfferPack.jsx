@@ -427,7 +427,7 @@ export default function UpdatedPricingWholePage() {
                 </p>
             </section> */}
 
-            <p className="text-center text-xs text-gray-500 max-w-xl mx-auto px-5 mt-5 mb-20">Please select a plan to continue.By purchasing, you agree to our Terms and Conditions. Pay two Australian dollars for seven-day access, then forty-nine dollars and ninety-nine cents monthly for fifteen photo animations. Cancel anytime.</p>
+            <p className="text-center text-xs text-gray-500 max-w-xl mx-auto px-5 mt-5 mb-20">Please select a plan to continue.By purchasing, you agree to our Terms and Conditions. Pay 2 USD for seven-day access, then forty-nine dollars and ninety-nine cents monthly for fifteen photo animations. Cancel anytime.</p>
 
             <PaymentModal
                 isOpen={showPayment}
