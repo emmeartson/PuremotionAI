@@ -103,11 +103,19 @@ const CheckoutForm = ({ onSuccess, onError }) => {
           id="payment-element"
           options={{
             layout: "tabs",
+            terms: {
+              card: 'never', // Hides "By subscribing, you authorize..."
+            },
             wallets: {
               link: "never",
             },
           }}
         />
+
+        <p className='text-center' style={{ fontSize: "12px", color: "#666", margin: "12px 0" }}>
+          By completing your purchase, you agree to our{" "}
+          <a href="/terms-of-service" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#856734]">Terms of Service</a> and applicable policies.
+        </p>
       </div>
 
       {/* Error Message */}
