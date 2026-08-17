@@ -427,7 +427,7 @@ export default function UpdatedPricingWholePage() {
                 </p>
             </section> */}
 
-            <p className="text-center text-xs text-gray-500 max-w-xl mx-auto px-5 mt-5 mb-20">Please select a plan to continue.By purchasing, you agree to our Terms and Conditions. Pay 2 USD for seven-day access, then forty-nine dollars and ninety-nine cents monthly for fifteen photo animations. Cancel anytime.</p>
+            <p className="text-center text-xs text-gray-500 max-w-xl mx-auto px-5 mt-5 mb-20"> By completing your purchase, you agree to pay 2 dollars today for 7 days full access. After 7 days, your subscription automatically renews at 49.99 dollars per month for 15 photo animations until cancelled. Cancel anytime through your account or by contacting Support. Refunds and cancellations are subject to our applicable policies.</p>
 
             <PaymentModal
                 isOpen={showPayment}
