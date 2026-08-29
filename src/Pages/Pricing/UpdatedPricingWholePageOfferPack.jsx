@@ -203,6 +203,8 @@ export default function UpdatedPricingWholePage() {
                 openCheckout={openCheckout}
             />
 
+            <p className="text-center text-xs text-gray-500 max-w-xl mx-auto px-5 mt-5 mb-20"> By completing your purchase, you agree to pay 2 dollars today for 7 days full access. After 7 days, your subscription automatically renews at 49.99 dollars per month for 15 photo animations until cancelled. Cancel anytime through your account or by contacting Support. Refunds and cancellations are subject to our applicable policies.</p>
+
             {/* 4a-2. What's Included */}
             <section className="mx-auto max-w-6xl px-5 py-10 sm:py-14">
                 <div className="mx-auto max-w-2xl text-center">
