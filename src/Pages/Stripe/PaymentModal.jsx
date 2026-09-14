@@ -288,6 +288,10 @@ function PaymentModal({
             </div>
           </div>
 
+          <div className="text-center mt-3 text-xs text-[#9CA3AF]">
+            Then US$34.99/month &middot; Includes 15 photo animations
+          </div>
+
           {/* Loading State */}
           {loading && (
             <div className="flex flex-col items-center justify-center py-12 gap-4">
